@@ -18,6 +18,8 @@ import { getDate, isValid } from "date-fns";
 
 import Calendar from "@/components/Calendar";
 
+import parse from 'date-fns/parse';
+
 export default {
   name: "DatePicker",
   components: {
@@ -87,23 +89,24 @@ export default {
       this.$emit("input", formattedDate);
     },
     changeInputDate() {
-      let changedDate = new Date(this.date)
+      // let changedDate = new Date(this.date)
+      let parsedDate = parse(this.date, 'dd.MM.yyyy', new Date())
 
-      if (isValid(changedDate)) {
+      if (isValid(parsedDate)) {
         this.showError = false;
         this.error = "";
-        if (this.disableDays(changedDate)) {
+        if (this.disableDays(parsedDate)) {
           this.showError = true;
           this.error = "You cannot select disabled day"
           return;
         };
 
-        let day = changedDate.getMonth()
-        let month = changedDate.getDate()
-        let year = changedDate.getFullYear()
+        // let day = changedDate.getMonth()
+        // let month = changedDate.getDate()
+        // let year = changedDate.getFullYear()
 
 
-        let formattedDate = format(changedDate, this.inFormat);
+        let formattedDate = format(parsedDate, this.inFormat);
         this.$emit("input", formattedDate);
 
       } else {
