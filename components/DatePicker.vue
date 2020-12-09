@@ -1,6 +1,6 @@
 <template lang="pug">
 .date-picker
-  input.date-input(placeholder="Choose date", maxlength=10 v-model="date")
+  input.date-input(placeholder="Choose date", maxlength=10 v-model="date" @change="changeInputDate")
   span.close(@click="date = ''") &#10005;
   
   .error(v-if="showError") {{ error }}
@@ -77,52 +77,6 @@ export default {
         this.date = format(new Date(newVal), this.outFormat); // To change if changed props date format
       },
     },
-    // Hand input date validation
-    date() {
-      // this.date;
-      // debugger
-      if (isValid(format(new Date(this.date), 'PP'))) {
-        debugger;
-      } else {}
-    },
-    date() {
-      console.log('case');
-    }
-    // date() {
-    //   debugger;
-    //   // let checkedData = format(new Date(this.date), this.inFormat);
-
-    //   if (isValid(new Date(this.date))) {
-    //     debugger;
-    //     // Forming new data
-    //     let day = format(new Date(this.date), 'dd');
-    //     let month = format(new Date(this.date), 'MM');
-    //     let year = format(new Date(this.date), 'yyyy');
-
-    //     // this.date.split(".")[0];
-    //     // let month = this.date.split(".")[1];
-    //     // let year = this.date.split(".")[2];
-    //     // Set new date to data
-    //     // this.currentDay = day;
-    //     // this.currentMonth = this.selectedMonth = month;
-    //     // this.currentYear = this.selectedYear = year;
-    //     // Check if data is disabled
-    //     if (this.disableDays(new Date(this.date))) {
-    //       this.showError = true;
-    //       this.error = "You cannot select disabled day"
-    //       return;
-    //     };
-    //     this.showError = false;
-    //     this.error = '';
-
-    //     // Emit to parent
-    //     let formattedDate = format(new Date(this.date), this.inFormat); // To change if changed props date format
-    //     this.$emit("input", formattedDate);
-    //   } else {
-    //     // this.showError = true;
-    //     // this.error = "Incorrect format"
-    //   }
-    // }
   },
   methods: {
     setNewDate(date) {
@@ -132,6 +86,31 @@ export default {
       let formattedDate = format(new Date(date), this.inFormat);
       this.$emit("input", formattedDate);
     },
+    changeInputDate() {
+      let changedDate = new Date(this.date)
+
+      if (isValid(changedDate)) {
+        this.showError = false;
+        this.error = "";
+        if (this.disableDays(changedDate)) {
+          this.showError = true;
+          this.error = "You cannot select disabled day"
+          return;
+        };
+
+        let day = changedDate.getMonth()
+        let month = changedDate.getDate()
+        let year = changedDate.getFullYear()
+
+
+        let formattedDate = format(changedDate, this.inFormat);
+        this.$emit("input", formattedDate);
+
+      } else {
+        this.showError = true;
+        this.error = "Incorrect data"
+      }
+    }
   },
 };
 </script>
