@@ -24,6 +24,7 @@
 <script>
 import format from "date-fns/format";
 import getDaysInMonth from 'date-fns/getDaysInMonth'
+import { getDate } from 'date-fns';
 
 export default {
   name: "DatePicker",
@@ -40,10 +41,16 @@ export default {
         return ''
       }
     },
-    format: {
+    inFormat: {
       type: String,
       default() {
-        return 'dd.MM.yyyy'
+        return ''
+      }
+    },
+    outFormat: {
+      type: String,
+      default() {
+        return ''
       }
     }
   },
@@ -122,7 +129,7 @@ export default {
       immediate: true,
       handler(newVal, oldVal) {
         console.log(newVal.length);
-        this.date = format(new Date(newVal), "dd.MM.yyyy"); // To change if changed props date format
+        this.date = format(new Date(newVal), this.outFormat); // To change if changed props date format
         let dataArr = this.date.split(".");
         this.currentDay = +dataArr[0];
         this.currentMonth = this.selectedMonth = +dataArr[1];
@@ -149,8 +156,12 @@ export default {
 
         // Check if data is disabled
         if (this.disableDays(new Date(year, month-1, day))) return;
+
+        // Change value of date in input
         this.date = day + "." + month + "." + year;
-        let formattedDate = format(new Date(this.currentYear, this.currentMonth - 1, this.currentDay), this.format); // To change if changed props date format
+
+        // Emit to parent
+        let formattedDate = format(new Date(this.currentYear, this.currentMonth - 1, this.currentDay), this.inFormat); // To change if changed props date format
         this.$emit("input", formattedDate);
       }
     },

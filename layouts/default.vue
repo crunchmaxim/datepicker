@@ -1,6 +1,6 @@
 <template lang="pug">
 .app
-  date-picker(v-model="date", :disableDays="disableDays" :format="format")
+  date-picker(v-model="date", :disableDays="disableDays" :inFormat="inFormat" :outFormat="outFormat")
   Nuxt
 </template>
 
@@ -14,7 +14,8 @@ export default {
   data() {
     return {
       date: "Dec 20, 2020",
-      format: "PP"
+      inFormat: "PP",
+      outFormat: "dd.MM.yyyy"
     };
   },
   computed: {
