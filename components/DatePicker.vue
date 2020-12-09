@@ -90,7 +90,7 @@ export default {
     },
     changeInputDate() {
       // let changedDate = new Date(this.date)
-      let parsedDate = parse(this.date, 'dd.MM.yyyy', new Date())
+      let parsedDate = parse(this.date, this.outFormat, new Date())
 
       if (isValid(parsedDate)) {
         this.showError = false;
