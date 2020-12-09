@@ -1,35 +1,61 @@
 <template lang="pug">
-  div
-    date-picker(v-model="date")
-    Nuxt
+.app
+  date-picker(v-model="date", :disableDays="disableDays" :format="format")
+  Nuxt
 </template>
 
 <script>
-import DatePicker from '@/components/DatePicker'
+import DatePicker from "@/components/DatePicker";
 
 export default {
   components: {
-    DatePicker
+    DatePicker,
   },
   data() {
     return {
-      date: 'December 8, 2020'
-    }
-  }
-}
+      date: "Dec 20, 2020",
+      format: "PP"
+    };
+  },
+  computed: {
+    disabledDaysArr() {
+      let disDays = [];
+      let disMonths = [];
+
+      this.disabledDays.days.split(",").forEach((d) => {
+        if (d.length > 2) {
+          for (let i = d.split("-")[0]; i <= d.split("-")[1]; i++) {
+            disDays.push(+i);
+          }
+        } else {
+          disDays.push(+d);
+        }
+      });
+
+      this.disabledDays.months.split(",").forEach((m) => disMonths.push(+m));
+      return { disDays, disMonths };
+    },
+  },
+  methods: {
+    disableDays(date) {
+      // if (day) {
+      //   let date = new Date(`${year} ${month} ${day}`);
+      //   let today = new Date();
+      //   return date.getTime() < today.setHours(0,0,0,0);
+      // }
+      if (date) {
+        let today = new Date();
+        return date.getTime() < today.setHours(0,0,0,0); 
+      }
+      return false;
+    },
+  },
+};
 </script>
 
 <style lang="stylus">
 html {
-  font-family:
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -39,9 +65,7 @@ html {
   box-sizing: border-box;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
 }
@@ -73,5 +97,9 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.app {
+  margin: 20px;
 }
 </style>

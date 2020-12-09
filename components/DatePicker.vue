@@ -1,42 +1,51 @@
 <template lang="pug">
 .date-picker
-  //- input(:value="value", placeholder="Choose date")
-  input(placeholder="Choose date", v-model="date")
+  input.date-input(placeholder="Choose date", v-model="date", maxlength=10)
+  span.close(@click="date = ''") &#10005;
   button(@click="toggleOpen = !toggleOpen") open
   .error(v-if="showError") Must be in format "dd.mm.yyyy"
   .wrapper(v-if="toggleOpen")
+    .months
+      span.arrow(@click="prevYear") &lt;&lt;
+      span.arrow(@click="prevMonth") &lt;
+      div {{ months[selectedMonth - 1] }} {{ selectedYear }}
+      span.arrow(@click="nextMonth") &gt;
+      span.arrow(@click="nextYear") &gt;&gt;
     .days
-      .day Mo
-      .day Tu
-      .day We
-      .day Th
-      .day Fr
-      .day Sa
-      .day Su
+      .day(v-for="day in weekDays") {{day}}
       .day(v-for="space of startWeekDay - 1", :key="-space")
         span
-      .day(
-        v-for="day of countOfDays",
-        :key="day",
-        @click="changeCurrentDate(day)"
-      )
-        span.selected(
-          v-if="day == currentDay && currentMonth == selectedMonth && currentYear == selectedYear"
-        ) {{ day }}
-        span.no-selected(v-else) {{ day }}
-    .months
-      span(@click="prevMonth") &lt;
-      div {{ months[selectedMonth - 1] }} {{ selectedYear }}
-      span(@click="nextMonth") &gt;
+      .day(v-for="day of countOfDays", :key="day" v-bind:class="{'today': isToday(day)}")
+        span.selected(v-if="day == currentDay && currentMonth == selectedMonth && currentYear == selectedYear") {{ day }}
+        span.disabled(v-else-if="disableDays(new Date(selectedYear, selectedMonth-1, day))") {{ day }}
+        span.no-selected(v-else, @click="changeCurrentDate(day)") {{ day }}
 </template>
 
 <script>
-import format from 'date-fns/format'
+import format from "date-fns/format";
+import getDaysInMonth from 'date-fns/getDaysInMonth'
 
 export default {
   name: "DatePicker",
   props: {
-    value: String,
+    disableDays: {
+      type: Function,
+      default (day) {
+        return false    
+      }
+    },
+    value: {
+      type: String,
+      default () {
+        return ''
+      }
+    },
+    format: {
+      type: String,
+      default() {
+        return 'dd.MM.yyyy'
+      }
+    }
   },
   data() {
     return {
@@ -48,6 +57,9 @@ export default {
 
       // Show error on input
       showError: false,
+
+      // Array of weekdays
+      weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
 
       // Array of months
       months: [
@@ -78,18 +90,7 @@ export default {
   computed: {
     // Count of days in selected months
     countOfDays() {
-      if (
-        this.selectedMonth === 3 ||
-        this.selectedMonth === 5 ||
-        this.selectedMonth === 8 ||
-        this.selectedMonth === 10
-      ) {
-        return 30;
-      } else if (this.selectedMonth === 1) {
-        return 28;
-      } else {
-        return 31;
-      }
+      return getDaysInMonth(new Date(this.selectedYear, this.selectedMonth-1))
     },
 
     // Month start weekday
@@ -104,13 +105,24 @@ export default {
         return day;
       }
     },
+
+    // Today date
+    today() {
+      let date = format(Date.now(), "dd.MM.yyyy");
+      return {
+        day: +date.split(".")[0],
+        month: +date.split(".")[1],
+        year: +date.split(".")[2],
+      };
+    },
   },
   watch: {
     // On value change
     value: {
       immediate: true,
       handler(newVal, oldVal) {
-        this.date = format(new Date(newVal), 'dd.MM.yyyy') // To change if changed props date format
+        console.log(newVal.length);
+        this.date = format(new Date(newVal), "dd.MM.yyyy"); // To change if changed props date format
         let dataArr = this.date.split(".");
         this.currentDay = +dataArr[0];
         this.currentMonth = this.selectedMonth = +dataArr[1];
@@ -119,51 +131,43 @@ export default {
     },
     // Hand input date validation
     date() {
+      // Validation
       if (this.date.length !== 10) {
         this.showError = true;
-      } else if (
-        this.date.split("")[2] !== "." ||
-        this.date.split("")[5] !== "."
-      ) {
+      } else if (this.date.split("")[2] !== "." || this.date.split("")[5] !== ".") {
         this.showError = true;
       } else {
         this.showError = false;
         let day = this.date.split(".")[0];
         let month = this.date.split(".")[1];
         let year = this.date.split(".")[2];
+
         // Set new date to data
         this.currentDay = day;
         this.currentMonth = this.selectedMonth = month;
         this.currentYear = this.selectedYear = year;
+
+        // Check if data is disabled
+        if (this.disableDays(new Date(year, month-1, day))) return;
         this.date = day + "." + month + "." + year;
-        
-        let formattedDate = format(new Date(this.currentYear, this.currentMonth-1, this.currentDay), 'PP'); // To change if changed props date format
+        let formattedDate = format(new Date(this.currentYear, this.currentMonth - 1, this.currentDay), this.format); // To change if changed props date format
         this.$emit("input", formattedDate);
       }
-    },
-    // Emit on date changing
-    currentDay() {
-      // let date = "";
-      // this.currentDay < 10
-      //   ? (date += `0${this.currentDay}`)
-      //   : (date += this.currentDay);
-      // date += ".";
-      // this.currentMonth < 10
-      //   ? (date += `0${this.currentMonth}`)
-      //   : (date += this.currentMonth);
-      // date += "." + this.currentYear;
-      // this.$emit("input", date);
     },
   },
   methods: {
     // Change current date by click on the day
-    changeCurrentDate(day, month = this.selectedMonth, year = this.selectedYear) {
-      console.log("case");
+    changeCurrentDate(
+      day,
+      month = this.selectedMonth,
+      year = this.selectedYear
+    ) {
       this.currentDay = day;
       this.currentMonth = this.selectedMonth;
       this.currentYear = this.selectedYear;
+
       // Set date
-      let date = '';
+      let date = "";
       this.currentDay < 10
         ? (date += `0${this.currentDay}`)
         : (date += this.currentDay);
@@ -172,7 +176,7 @@ export default {
         ? (date += `0${this.currentMonth}`)
         : (date += this.currentMonth);
       date += "." + this.currentYear;
-      this.date = date
+      this.date = date;
     },
     prevMonth() {
       if (this.selectedMonth === 1) {
@@ -190,15 +194,37 @@ export default {
         this.selectedMonth++;
       }
     },
+    prevYear() {
+      this.selectedYear--;
+    },
+    nextYear() {
+      this.selectedYear++;
+    },
+    // check if day is today
+    isToday(day) {
+      if (this.selectedMonth == this.today.month && this.selectedYear == this.today.year) {
+        if (day === this.today.day) {
+          return true;
+        }
+      }
+    }
   },
 };
 </script>
 
 <style lang="stylus">
+.date-picker {
+  position: relative;
+}
+
 .wrapper {
-  height: 300px;
+  height: 250px;
   width: 200px;
   border: 1px solid black;
+}
+
+.date-input {
+  width: 200px;
 }
 
 .days {
@@ -217,7 +243,7 @@ export default {
 }
 
 .no-selected:hover {
-  background-color: gray;
+  background-color: yellow;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -230,6 +256,9 @@ export default {
 .months {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid black;
+  height: 30px;
 
   div {
     dispay: flex;
@@ -243,5 +272,36 @@ export default {
 .error {
   border: 1px solid red;
   width: 200px;
+}
+
+.arrow:hover {
+  background-color: green;
+}
+
+.close {
+  border-radius: 50%;
+  border: 1px solid gray;
+  height: 19px;
+  width: 19px;
+  position: absolute;
+  left: 180px;
+  top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: green;
+  }
+}
+
+.disabled {
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.today {
+  border: 2px solid red;
 }
 </style>
