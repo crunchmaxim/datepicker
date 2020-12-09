@@ -1,6 +1,8 @@
 <template lang="pug">
 .app
-  date-picker(v-model="date", :disableDays="disableDays" :inFormat="inFormat" :outFormat="outFormat")
+  date-picker(v-model="date", :disableDays="disableDaysStart" :inFormat="inFormat" :outFormat="outFormat")
+  date-picker(v-model="date2", :disableDays="disableDaysEnd" :inFormat="inFormat" :outFormat="outFormat")  
+
   Nuxt
 </template>
 
@@ -13,43 +15,43 @@ export default {
   },
   data() {
     return {
-      date: "Dec 20, 2020",
+      date: "Dec 7, 2020",
+      date2: "Dec 20, 2020",
+      // interval: [new Date(2020, 12, 1), new Date(2020, 12, 20)],
       inFormat: "PP",
-      outFormat: "dd.MM.yyyy"
+      outFormat: "dd.MM.yyyy",
     };
   },
   computed: {
-    disabledDaysArr() {
-      let disDays = [];
-      let disMonths = [];
-
-      this.disabledDays.days.split(",").forEach((d) => {
-        if (d.length > 2) {
-          for (let i = d.split("-")[0]; i <= d.split("-")[1]; i++) {
-            disDays.push(+i);
-          }
-        } else {
-          disDays.push(+d);
-        }
-      });
-
-      this.disabledDays.months.split(",").forEach((m) => disMonths.push(+m));
-      return { disDays, disMonths };
-    },
+    // disabledDaysArr() {
+    //   let disDays = [];
+    //   let disMonths = [];
+    //   this.disabledDays.days.split(",").forEach((d) => {
+    //     if (d.length > 2) {
+    //       for (let i = d.split("-")[0]; i <= d.split("-")[1]; i++) {
+    //         disDays.push(+i);
+    //       }
+    //     } else {
+    //       disDays.push(+d);
+    //     }
+    //   });
+    //   this.disabledDays.months.split(",").forEach((m) => disMonths.push(+m));
+    //   return { disDays, disMonths };
+    // },
   },
   methods: {
-    disableDays(date) {
-      // if (day) {
-      //   let date = new Date(`${year} ${month} ${day}`);
-      //   let today = new Date();
-      //   return date.getTime() < today.setHours(0,0,0,0);
-      // }
-      if (date) {
-        let today = new Date();
-        return date.getTime() < today.setHours(0,0,0,0); 
-      }
-      return false;
+    disableDaysStart(day) {
+      return day > new Date(this.date2);
     },
+    disableDaysEnd (day) {
+      return day < new Date(this.date);
+    },
+    // disBeforeStart(date1, date2) {
+    //   return date1 < date2
+    // },
+    // disAfterStart(date1, date2) {
+    //   return date1 > date2
+    // },
   },
 };
 </script>
@@ -102,5 +104,6 @@ html {
 
 .app {
   margin: 20px;
+  display: flex;
 }
 </style>

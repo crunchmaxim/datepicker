@@ -15,7 +15,7 @@
       .day(v-for="day of countOfDays", :key="day" v-bind:class="{'today': isToday(day)}")
         span.selected(v-if="day == currentDay && currentMonth == selectedMonth && currentYear == selectedYear") {{ day }}
         span.disabled(v-else-if="disableDays(new Date(selectedYear, selectedMonth-1, day))") {{ day }}
-        span.no-selected(v-else, @click="changeCurrentDate(day)") {{ day }}
+        span.no-selected(v-else @click="changeCurrentDate(day)") {{ day }}
 </template>
 
 <script>

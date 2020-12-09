@@ -18,7 +18,7 @@ import { getDate, isValid } from "date-fns";
 
 import Calendar from "@/components/Calendar";
 
-import parse from 'date-fns/parse';
+import parse from "date-fns/parse";
 
 export default {
   name: "DatePicker",
@@ -61,13 +61,13 @@ export default {
       error: "",
 
       // Current date values
-      currentDay: "",
-      currentMonth: "",
-      currentYear: "",
+      // currentDay: "",
+      // currentMonth: "",
+      // currentYear: "",
 
-      // Selected date values
-      selectedMonth: "",
-      selectedYear: "",
+      // // Selected date values
+      // selectedMonth: "",
+      // selectedYear: "",
     };
   },
   computed: {},
@@ -90,30 +90,50 @@ export default {
     },
     changeInputDate() {
       // let changedDate = new Date(this.date)
-      let parsedDate = parse(this.date, this.outFormat, new Date())
+      let parsedDate = parse(this.date, this.outFormat, new Date());
 
       if (isValid(parsedDate)) {
         this.showError = false;
         this.error = "";
         if (this.disableDays(parsedDate)) {
           this.showError = true;
-          this.error = "You cannot select disabled day"
+          this.error = "You cannot select disabled day";
           return;
-        };
+        }
 
+        // End date validation
+        if (this.mode === "start") {
+          if (parsedDate > new Date(this.end)) {
+            this.showError = true;
+            this.error = "Date cannot be more then end date";
+            return;
+          }
+        }
+
+        // Start date validation
+        if (this.mode === "end") {
+          if (parsedDate < new Date(this.end)) {
+            this.showError = true;
+            this.error = "Date cannot be less then start date";
+            return;
+          }
+        }
+        
         // let day = changedDate.getMonth()
         // let month = changedDate.getDate()
         // let year = changedDate.getFullYear()
 
+        // Clear error
+        this.showError = false;
+        this.error = '';
 
         let formattedDate = format(parsedDate, this.inFormat);
         this.$emit("input", formattedDate);
-
       } else {
         this.showError = true;
-        this.error = "Incorrect data"
+        this.error = "Incorrect data";
       }
-    }
+    },
   },
 };
 </script>
@@ -121,6 +141,7 @@ export default {
 <style lang="stylus">
 .date-picker {
   position: relative;
+  margin: 0 20px;
 }
 
 .wrapper {
