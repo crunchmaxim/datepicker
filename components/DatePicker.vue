@@ -3,7 +3,7 @@
   input.date-input(placeholder="Choose date", v-model="date", maxlength=10)
   span.close(@click="date = ''") &#10005;
   button(@click="toggleOpen = !toggleOpen") open
-  .error(v-if="showError") Must be in format "dd.mm.yyyy"
+  .error(v-if="showError") {{error}}
   .wrapper(v-if="toggleOpen")
     .months
       span.arrow(@click="prevYear") &lt;&lt;
@@ -64,6 +64,7 @@ export default {
 
       // Show error on input
       showError: false,
+      error: '',
 
       // Array of weekdays
       weekDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
@@ -141,10 +142,18 @@ export default {
       // Validation
       if (this.date.length !== 10) {
         this.showError = true;
+        this.error = "Must be in format dd.mm.yyyy";
+      } else if (+this.date.substring(0, 3) > 31) {
+        this.showError = true;
+        this.error = "Incorrect day";
       } else if (this.date.split("")[2] !== "." || this.date.split("")[5] !== ".") {
         this.showError = true;
+        this.error = "Must be in format dd.mm.yyyy";
       } else {
         this.showError = false;
+        this.error = "";
+
+        // Forming new data
         let day = this.date.split(".")[0];
         let month = this.date.split(".")[1];
         let year = this.date.split(".")[2];
@@ -155,7 +164,14 @@ export default {
         this.currentYear = this.selectedYear = year;
 
         // Check if data is disabled
-        if (this.disableDays(new Date(year, month-1, day))) return;
+        if (this.disableDays(new Date(year, month-1, day))) {
+          this.showError = true;
+          this.error = "You cannot select disabled day"
+          return;
+        };
+        this.showError = false;
+        this.error = '';
+
 
         // Change value of date in input
         this.date = day + "." + month + "." + year;
