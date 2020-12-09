@@ -17,7 +17,6 @@ export default {
     return {
       date: "Dec 7, 2020",
       date2: "Dec 20, 2020",
-      // interval: [new Date(2020, 12, 1), new Date(2020, 12, 20)],
       inFormat: "PP",
       outFormat: "dd.MM.yyyy",
     };

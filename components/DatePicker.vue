@@ -86,6 +86,7 @@ export default {
       let month = format(new Date(date), "MM");
       let year = format(new Date(date), "yyyy");
       let formattedDate = format(new Date(date), this.inFormat);
+      // let formattedDate = format(new Date(date), this.outFormat);
       this.$emit("input", formattedDate);
     },
     changeInputDate() {
@@ -128,6 +129,7 @@ export default {
         this.error = '';
 
         let formattedDate = format(parsedDate, this.inFormat);
+        // let formattedDate = format(parsedDate, this.outFormat);
         this.$emit("input", formattedDate);
       } else {
         this.showError = true;
