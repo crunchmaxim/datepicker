@@ -44,14 +44,7 @@ export default {
                         this.$scopedSlots.item ? this.$scopedSlots.item({ item, index }) : item
                     ]
                 ),
-
-                h('div', { class: 'il__item__content' }, 
-                    [
-                        this.$scopedSlots.date ? this.$scopedSlots.date({ item, index }) : item.date
-                    ]
-                ),
-
-                this.$scopedSlots.tools && h('button', { class: 'il__item__tools', on: {click: () => this.toolMethod(index)}}, [
+                this.$scopedSlots.tools && h('div', { class: 'il__item__tools'}, [
                     this.$scopedSlots.tools({ item, index })
                 ])
             ]

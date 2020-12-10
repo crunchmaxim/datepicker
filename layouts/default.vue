@@ -10,7 +10,8 @@
       | Заголовок {{title}} 
       br
       | {{date}}
-    template(#tools="{item, index}") Delete {{item.title}}
+    template(#tools="{item, index}") 
+      button(@click="onClickDelete(item, index)") {{item.title}}
 
   Nuxt
 </template>
@@ -35,6 +36,9 @@ export default {
     };
   },
   methods: {
+    onClickDelete (item, index) {
+      this.collection.splice(index, 1)
+    },
     disableDaysStart(day) {
       return day > new Date(this.date2);
     },
