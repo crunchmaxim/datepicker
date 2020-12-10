@@ -8,6 +8,12 @@ export default {
         return [];
       },
     },
+    testCollection: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
     tag: {
       type: String,
       default() {
@@ -23,16 +29,35 @@ export default {
   },
 
   render: function(h) {
-      return h('div', [
+      return h('div', { class: 'il'}, [
           // Footer
-          h('h1', 'Header'),
+          this.$slots.header && h('div', this.$slots.header),
           
           // Content
-          h(this.tag, [...this.collection.map(item => {
-            return h(this.itemTag, `Id: ${item.id}, Title: ${item.title}`)  
-        })]),
+          h(this.tag, this.collection.map((item, index) => {
+            return h(this.itemTag, {
+                class: 'il__item'
+            }, 
+            [
+                h('div', { class: 'il__item__content' }, 
+                    [
+                        this.$scopedSlots.item ? this.$scopedSlots.item({ model: item, index }) : item
+                    ]
+                ),
+                this.$scopedSlots.tools && h('div', { class: 'il__item__tools' }, [
+                    this.$scopedSlots.tools({ model: item, index })
+                ])
+            ]
+            )
+                })
+            ),
 
-          h('h2', 'Footer')
+          // Footer
+          this.$slots.footer && h('div', this.$slots.footer),
+
+          ...this.testCollection.map(testItem => {
+              return h('div', this.$scopedSlots.testItem({testItem}))
+          })
       ])
   }
 
@@ -48,4 +73,17 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+    .il
+        display flex
+        flex-flow column wrap
+        &__item
+          display flex
+          flex-flow row nowrap
+          max-width 100%          
+          &__content
+            flex 1 1            
+          &__tools
+            justify-self flex-end
+
+</style>
