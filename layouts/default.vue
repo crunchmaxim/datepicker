@@ -25,10 +25,16 @@ export default {
   },
   methods: {
     disableDaysStart(day) {
+      // if (this.date !== '') {
       return day > new Date(this.date2);
+      // } else {
+      // }
     },
     disableDaysEnd (day) {
-      return day < new Date(this.date);
+      // if (this.date2 !== '') {
+        return day < new Date(this.date);
+      // } else {
+      // }
     },
   },
   computed: {

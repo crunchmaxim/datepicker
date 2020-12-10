@@ -111,10 +111,16 @@ export default {
     value: {
       immediate: true,
       handler(newVal, oldVal) {
-        if (isValid(new Date(this.value)))
+        if (isValid(new Date(this.value))) {
           this.currentDay = +format(new Date(this.value), 'dd');
           this.currentMonth = this.selectedMonth = +format(new Date(this.value), 'MM');
           this.currentYear = this.selectedYear = +format(new Date(this.value), 'yyyy');
+        } else {
+          let date = new Date()
+          this.currentDay = 0
+          this.currentMonth = this.selectedMonth = date.getMonth()+1
+          this.currentYear = this.selectedYear = date.getFullYear()
+        }
       }
     }
   },

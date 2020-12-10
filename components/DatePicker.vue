@@ -76,9 +76,19 @@ export default {
     value: {
       immediate: true,
       handler(newVal, oldVal) {
-        this.date = format(new Date(newVal), this.outFormat); // To change if changed props date format
+        if (newVal !== '') {
+          this.date = format(new Date(newVal), this.outFormat); // To change if changed props date format
+        } else {
+          this.date = ''
+        }
       },
     },
+    date() {
+      if (this.date === '') {
+        this.$emit("input", '')
+        return;
+      }
+    }
   },
   methods: {
     setNewDate(date) {
@@ -97,6 +107,9 @@ export default {
     },
     changeInputDate() {
       // let changedDate = new Date(this.date)
+      // If input is empty
+
+
       let parsedDate = parse(this.date, this.outFormat, new Date());
 
       if (isValid(parsedDate)) {
