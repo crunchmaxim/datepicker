@@ -20,18 +20,12 @@ export default {
         return "";
       },
     },
-    toolMethod: {
-        type: Function,
-        default() {
-            return "";
-        }
-    }
   },
 
   render: function(h) {
       return h('div', { class: 'il'}, [
           // Footer
-          this.$slots.header && h('div', this.$slots.header),
+          this.$slots.header && h('div', { class: 'header' }, this.$slots.header),
           
           // Content
           h(this.tag, this.collection.map((item, index) => {
@@ -53,7 +47,7 @@ export default {
             ),
 
           // Footer
-          this.$slots.footer && h('div', this.$slots.footer),
+          this.$slots.footer && h('div', { class: 'footer'}, this.$slots.footer),
       ])
   }
 
@@ -71,6 +65,10 @@ export default {
 
 <style lang="stylus">
     .il
+        margin-top 20px
+        background-color #005caf
+        padding 20px
+        color #fff
         display flex
         flex-flow column wrap
         &__item
@@ -78,8 +76,12 @@ export default {
           flex-flow row nowrap
           max-width 100%          
           &__content
-            flex 1 1            
+            flex 1 1
+            border 1px solid #fff            
           &__tools
             justify-self flex-end
+        .header, .footer {
+            text-align center
+        }
 
 </style>

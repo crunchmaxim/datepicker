@@ -3,9 +3,9 @@
   .picker-wrapper
     date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
     date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
-  items-list(:collection="collection" tag="ul" item-tag="li" :toolMethod="toolMethod")
+  items-list(:collection="filteredCollection" tag="ul" item-tag="li")
     template(v-slot:header) Some header
-    template(v-slot:footer) Count of items: {{collection.length}}
+    template(v-slot:footer) Count of items: {{filteredCollection.length}}
     template(#item="{ item: { title, date }, index }") 
       | Заголовок {{title}} 
       br
@@ -27,7 +27,9 @@ export default {
   },
   data() {
     return {
-      collection: [{id: 1, title: "title 1", date: "2020-12-05" }, {id: 2, title: "title 2", date: "2020-12-12"}, {id: 3, title: "title 3", date: "2020-12-25"}, {id: 4, title: "title 4", date: "2020-12-31" }],
+      collection: [{id: 1, title: "title 1", date: "2020-12-07" }, {id: 2, title: "title 2", date: "2020-12-08"}, 
+      {id: 3, title: "title 3", date: "2020-12-09"}, {id: 4, title: "title 4", date: "2020-12-10" }, 
+      {id: 5, title: "title 5", date: "2020-12-11" }, {id: 6, title: "title 6", date: "2020-12-12" }, {id: 7, title: "title 7", date: "2020-12-13" }],
       date: "2020-12-07",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
@@ -45,9 +47,6 @@ export default {
     disableDaysEnd (day) {
       return day < new Date(this.date);
     },
-    toolMethod(index) {
-      this.collection.splice(index, 1);
-    }
   },
   computed: {
     stylePrimary() {
@@ -59,6 +58,19 @@ export default {
       return {
         '--color': "#9bf6ff"
       }
+    },
+    filteredCollection() {
+      function formatDate(date) {
+        return new Date(date).setHours(0,0,0,0)
+      }
+
+      let filtered = this.collection.filter(item => {
+        if (formatDate(item.date) >= formatDate(this.date) && formatDate(item.date) <= formatDate(this.date2)) {
+          debugger;
+          return item;
+        }
+      })
+      return filtered;
     }
   }
 };
