@@ -1,7 +1,7 @@
 <template lang="pug">
 .app
-  date-picker(v-model="date", :disableDays="disableDaysStart" :inFormat="inFormat1" :outFormat="outFormat")
-  date-picker(v-model="date2", :disableDays="disableDaysEnd" :inFormat="inFormat2" :outFormat="outFormat")  
+  date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
+  date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")  
 
   Nuxt
 </template>
@@ -15,6 +15,7 @@ export default {
   },
   data() {
     return {
+      // collection: [{id: 1, title: "title 1", }]
       date: "2020-12-07",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
@@ -30,6 +31,18 @@ export default {
       return day < new Date(this.date);
     },
   },
+  computed: {
+    stylePrimary() {
+      return {
+      '--color': "#caffbf"
+      }
+    },
+    styleSecondary() {
+      return {
+        '--color': "#9bf6ff"
+      }
+    }
+  }
 };
 </script>
 

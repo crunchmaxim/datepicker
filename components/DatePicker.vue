@@ -159,6 +159,7 @@ export default {
 }
 
 .wrapper {
+  font-size 12px;
   height: 250px;
   width: 200px;
   border: 1px solid black;
@@ -190,7 +191,7 @@ export default {
 }
 
 .selected {
-  background-color: green;
+  background-color: var(--color);
   border-radius: 500%;
 }
 
@@ -200,6 +201,9 @@ export default {
   align-items: center;
   border-bottom: 1px solid black;
   height: 30px;
+  background-color #005CAF;
+  color: #fff;
+  font-size: 14px;
 
   div {
     dispay: flex;
