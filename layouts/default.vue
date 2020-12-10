@@ -5,7 +5,8 @@
     date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
   items-list(:collection="filteredCollection" tag="ul" item-tag="li")
     template(v-slot:header) Some header
-    template(v-slot:footer) Count of items: {{filteredCollection.length}}
+    template(v-slot:footer) count of items: {{filteredCollection.length}}
+      button(@click="showMore" v-if="filteredCollection.length===10") Show more
     template(#item="{ item: { title, date }, index }") 
       | Заголовок {{title}} 
       br
@@ -29,7 +30,10 @@ export default {
     return {
       collection: [{id: 1, title: "title 1", date: "2020-12-07" }, {id: 2, title: "title 2", date: "2020-12-08"}, 
       {id: 3, title: "title 3", date: "2020-12-09"}, {id: 4, title: "title 4", date: "2020-12-10" }, 
-      {id: 5, title: "title 5", date: "2020-12-11" }, {id: 6, title: "title 6", date: "2020-12-12" }, {id: 7, title: "title 7", date: "2020-12-13" }],
+      {id: 5, title: "title 5", date: "2020-12-11" }, {id: 6, title: "title 6", date: "2020-12-12" }, {id: 7, title: "title 7", date: "2020-12-13" },
+      {id: 8, title: "title 8", date: "2020-12-14" }, {id: 9, title: "title 9", date: "2020-12-15" }, {id: 10, title: "title 10", date: "2020-12-16" },
+      {id: 11, title: "title 11", date: "2020-12-17" }, {id: 12, title: "title 12", date: "2020-12-18" }],
+      countOfItems: 10,
       date: "2020-12-07",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
@@ -39,7 +43,7 @@ export default {
   },
   methods: {
     onClickDelete (item, index) {
-      this.collection.splice(index, 1)
+      this.collection.splice(this.collection.indexOf(item), 1)
     },
     disableDaysStart(day) {
       return day > new Date(this.date2);
@@ -47,6 +51,9 @@ export default {
     disableDaysEnd (day) {
       return day < new Date(this.date);
     },
+    showMore() {
+      this.countOfItems+=10;
+    }
   },
   computed: {
     stylePrimary() {
@@ -66,11 +73,10 @@ export default {
 
       let filtered = this.collection.filter(item => {
         if (formatDate(item.date) >= formatDate(this.date) && formatDate(item.date) <= formatDate(this.date2)) {
-          debugger;
           return item;
         }
       })
-      return filtered;
+      return filtered.slice(0, this.countOfItems);
     }
   }
 };
