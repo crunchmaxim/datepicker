@@ -6,7 +6,7 @@
   items-list(:collection="filteredCollection" tag="ul" item-tag="li")
     template(v-slot:header) Some header
     template(v-slot:footer) count of items: {{filteredCollection.length}}
-      button(@click="showMore" v-if="filteredCollection.length===10") Show more
+      button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
     template(#item="{ item: { title, date }, index }") 
       | Заголовок {{title}} 
       br
