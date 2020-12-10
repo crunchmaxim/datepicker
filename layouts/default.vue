@@ -3,11 +3,11 @@
   .picker-wrapper
     date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
     date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
-  items-list(:collection="collection" tag="ul" item-tag="li" :testCollection="testCollection")
-    template(v-slot:header) header template
-    template(v-slot:footer) footer template
-    template(#item="{ model, index }") {{model.title}}
-    template(#testItem="{testItem}") {{testItem.name}}
+  items-list(:collection="collection" tag="ul" item-tag="li" :toolMethod="toolMethod")
+    template(v-slot:header) Some header
+    template(v-slot:footer) Count of items: {{collection.length}}
+    template(#item="{item, index}") {{item.title}}
+    template(#tools="{item, index}") Delete {{item.title}}
 
   Nuxt
 </template>
@@ -24,7 +24,6 @@ export default {
   data() {
     return {
       collection: [{id: 1, title: "title 1", }, {id: 2, title: "title 2", }, {id: 3, title: "title 3", }, {id: 4, title: "title 4" }],
-      testCollection: [{id: 1, name: "Name 1"}, {id: 2, name: "Name 2"}, {id: 3, name: "Name 3"}, {id: 4, name: "Name 4"},],
       date: "2020-12-07",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
@@ -39,6 +38,9 @@ export default {
     disableDaysEnd (day) {
       return day < new Date(this.date);
     },
+    toolMethod(index) {
+      this.collection.splice(index, 1);
+    }
   },
   computed: {
     stylePrimary() {

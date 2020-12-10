@@ -8,12 +8,6 @@ export default {
         return [];
       },
     },
-    testCollection: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
     tag: {
       type: String,
       default() {
@@ -26,6 +20,12 @@ export default {
         return "";
       },
     },
+    toolMethod: {
+        type: Function,
+        default() {
+            return "";
+        }
+    }
   },
 
   render: function(h) {
@@ -41,11 +41,11 @@ export default {
             [
                 h('div', { class: 'il__item__content' }, 
                     [
-                        this.$scopedSlots.item ? this.$scopedSlots.item({ model: item, index }) : item
+                        this.$scopedSlots.item ? this.$scopedSlots.item({ item, index }) : item
                     ]
                 ),
-                this.$scopedSlots.tools && h('div', { class: 'il__item__tools' }, [
-                    this.$scopedSlots.tools({ model: item, index })
+                this.$scopedSlots.tools && h('button', { class: 'il__item__tools', on: {click: () => this.toolMethod(index)}}, [
+                    this.$scopedSlots.tools({ item, index })
                 ])
             ]
             )
@@ -54,10 +54,6 @@ export default {
 
           // Footer
           this.$slots.footer && h('div', this.$slots.footer),
-
-          ...this.testCollection.map(testItem => {
-              return h('div', this.$scopedSlots.testItem({testItem}))
-          })
       ])
   }
 
