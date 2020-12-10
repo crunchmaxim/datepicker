@@ -33,7 +33,7 @@ export default {
       },
     },
     value: {
-      type: String,
+      type: [String, Number],
       default() {
         return "";
       },
@@ -82,12 +82,18 @@ export default {
   },
   methods: {
     setNewDate(date) {
+      // debugger;
       let day = format(new Date(date), "dd");
       let month = format(new Date(date), "MM");
       let year = format(new Date(date), "yyyy");
       let formattedDate = format(new Date(date), this.inFormat);
       // let formattedDate = format(new Date(date), this.outFormat);
-      this.$emit("input", formattedDate);
+      // debugger;
+      if (Number.isInteger(+formattedDate)) {
+        this.$emit("input", +formattedDate);
+      } else {
+        this.$emit("input", formattedDate);
+      }
     },
     changeInputDate() {
       // let changedDate = new Date(this.date)
@@ -130,7 +136,13 @@ export default {
 
         let formattedDate = format(parsedDate, this.inFormat);
         // let formattedDate = format(parsedDate, this.outFormat);
-        this.$emit("input", formattedDate);
+
+        if (Number.isInteger(+formattedDate)) {
+        this.$emit("input", +formattedDate);
+        } else {
+          this.$emit("input", formattedDate);
+        }
+        // this.$emit("input", formattedDate);
       } else {
         this.showError = true;
         this.error = "Incorrect data";

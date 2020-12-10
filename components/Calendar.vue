@@ -25,12 +25,12 @@ import { format, isValid } from 'date-fns';
 export default {
   name: "Calendar",
   props: {
-    date: {
-      type: String,
-      default() {
-        return "";
-      }
-    },
+    // date: {
+    //   type: String,
+    //   default() {
+    //     return "";
+    //   }
+    // },
     disableDays: {
       type: Function,
       default(day) {
@@ -38,7 +38,7 @@ export default {
       }
     },
     value: {
-      type: String,
+      type: [String, Number],
       default() {
         return "";
       }
@@ -156,21 +156,8 @@ export default {
       this.currentDay = day;
       this.currentMonth = this.selectedMonth;
       this.currentYear = this.selectedYear;
-
       let date = new Date(this.currentYear, this.currentMonth-1, this.currentDay);
-      this.$emit('changeCurrentDate', date)
-      // Set date
-      // let date = "";
-      // this.currentDay < 10
-      //   ? (date += `0${this.currentDay}`)
-      //   : (date += this.currentDay);
-      // date += ".";
-      // this.currentMonth < 10
-      //   ? (date += `0${this.currentMonth}`)
-      //   : (date += this.currentMonth);
-      // date += "." + this.currentYear;
-      // this.$emit('changeCurrentDate', date)
-      // this.date = date;
+      this.$emit('changeCurrentDate', date);
     },
   }
 };

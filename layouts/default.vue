@@ -1,7 +1,7 @@
 <template lang="pug">
 .app
-  date-picker(v-model="date", :disableDays="disableDaysStart" :inFormat="inFormat" :outFormat="outFormat")
-  date-picker(v-model="date2", :disableDays="disableDaysEnd" :inFormat="inFormat" :outFormat="outFormat")  
+  date-picker(v-model="date", :disableDays="disableDaysStart" :inFormat="inFormat1" :outFormat="outFormat")
+  date-picker(v-model="date2", :disableDays="disableDaysEnd" :inFormat="inFormat2" :outFormat="outFormat")  
 
   Nuxt
 </template>
@@ -15,28 +15,12 @@ export default {
   },
   data() {
     return {
-      date: "Dec 7, 2020",
-      date2: "Dec 20, 2020",
-      inFormat: "PP",
+      date: "2020-12-07",
+      date2: Date.now(),
+      inFormat1: "yyyy-MM-dd",
+      inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
     };
-  },
-  computed: {
-    // disabledDaysArr() {
-    //   let disDays = [];
-    //   let disMonths = [];
-    //   this.disabledDays.days.split(",").forEach((d) => {
-    //     if (d.length > 2) {
-    //       for (let i = d.split("-")[0]; i <= d.split("-")[1]; i++) {
-    //         disDays.push(+i);
-    //       }
-    //     } else {
-    //       disDays.push(+d);
-    //     }
-    //   });
-    //   this.disabledDays.months.split(",").forEach((m) => disMonths.push(+m));
-    //   return { disDays, disMonths };
-    // },
   },
   methods: {
     disableDaysStart(day) {
@@ -45,12 +29,6 @@ export default {
     disableDaysEnd (day) {
       return day < new Date(this.date);
     },
-    // disBeforeStart(date1, date2) {
-    //   return date1 < date2
-    // },
-    // disAfterStart(date1, date2) {
-    //   return date1 > date2
-    // },
   },
 };
 </script>
