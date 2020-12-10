@@ -1,21 +1,25 @@
 <template lang="pug">
 .app
-  date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
-  date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")  
+  .picker-wrapper
+    date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
+    date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
+  items-list(:collection="collection" tag="ul" item-tag="li")
 
   Nuxt
 </template>
 
 <script>
 import DatePicker from "@/components/DatePicker";
+import ItemsList from "@/components/ItemsList";
 
 export default {
   components: {
     DatePicker,
+    ItemsList
   },
   data() {
     return {
-      // collection: [{id: 1, title: "title 1", }]
+      collection: [{id: 1, title: "title 1", }, {id: 2, title: "title 2", }, {id: 3, title: "title 3", }, {id: 4, title: "title 4", }],
       date: "2020-12-07",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
@@ -25,16 +29,10 @@ export default {
   },
   methods: {
     disableDaysStart(day) {
-      // if (this.date !== '') {
       return day > new Date(this.date2);
-      // } else {
-      // }
     },
     disableDaysEnd (day) {
-      // if (this.date2 !== '') {
-        return day < new Date(this.date);
-      // } else {
-      // }
+      return day < new Date(this.date);
     },
   },
   computed: {
@@ -100,6 +98,11 @@ html {
 
 .app {
   margin: 20px;
+  display: flex;
+  flex-direction: column; 
+}
+
+.picker-wrapper {
   display: flex;
 }
 </style>
