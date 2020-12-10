@@ -6,7 +6,10 @@
   items-list(:collection="collection" tag="ul" item-tag="li" :toolMethod="toolMethod")
     template(v-slot:header) Some header
     template(v-slot:footer) Count of items: {{collection.length}}
-    template(#item="{item, index}") {{item.title}}
+    template(#item="{ item: { title, date }, index }") 
+      | Заголовок {{title}} 
+      br
+      | {{date}}
     template(#tools="{item, index}") Delete {{item.title}}
 
   Nuxt
@@ -23,7 +26,7 @@ export default {
   },
   data() {
     return {
-      collection: [{id: 1, title: "title 1", }, {id: 2, title: "title 2", }, {id: 3, title: "title 3", }, {id: 4, title: "title 4" }],
+      collection: [{id: 1, title: "title 1", date: "2020-12-05" }, {id: 2, title: "title 2", date: "2020-12-12"}, {id: 3, title: "title 3", date: "2020-12-25"}, {id: 4, title: "title 4", date: "2020-12-31" }],
       date: "2020-12-07",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
