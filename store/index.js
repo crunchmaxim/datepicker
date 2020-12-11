@@ -22,46 +22,47 @@ export const actions = {
 
     // Fetch all notes action
     async fetchAllNotes({commit}) {
-        // Get updated note list from API
-        const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
-        commit('setNotes', response)
+        try {
+            // Get updated note list from API
+            const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
+            commit('setNotes', response)
 
-        // Redirect on home page
-        this.$router.push('/')
+            // Redirect on home page
+            this.$router.push('/')
+        } catch (error) {
+            console.log(error)
+        }
+
     },
 
     // Update one note
     async updateOneNote({dispatch}, payload) {
-        await this.$axios.$put('http://afs.alt-point.ru:8080/notes/' + payload.id, payload.note)
-        await dispatch('fetchAllNotes')
-        // // Get updated note list from API
-        // const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
-        // commit('setNotes', response)
-
-        // // Redirect on home page
-        // this.$router.push('/')
+        try {
+            await this.$axios.$put('http://afs.alt-point.ru:8080/notes/' + payload.id, payload.note)
+            await dispatch('fetchAllNotes')
+        } catch (error) {
+            console.log(error)
+        }
     },
 
     // Create new note
     async createNewNote({dispatch}, newNote) {
-        await this.$axios.$post('http://afs.alt-point.ru:8080/notes', newNote)
-        await dispatch('fetchAllNotes')
-
-        // // Get updated note list from API
-        // const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
-        // commit('setNotes', response)
-        // // Redirect on home page
-        // this.$router.push('/')
+        try {
+            await this.$axios.$post('http://afs.alt-point.ru:8080/notes', newNote)
+            await dispatch('fetchAllNotes')
+        } catch (error) {
+            console.log(error)
+        }
     },
 
     //Delete one note
     async deleteOneNote({dispatch}, id) {
-        await this.$axios.$delete('http://afs.alt-point.ru:8080/notes/' + id)
-        await dispatch('fetchAllNotes')
-
-        // // Get updated note list from API
-        // const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
-        // commit('setNotes', response)
+        try {
+            await this.$axios.$delete('http://afs.alt-point.ru:8080/notes/' + id)
+            await dispatch('fetchAllNotes')
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 

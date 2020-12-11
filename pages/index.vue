@@ -10,13 +10,14 @@
           nuxt-link(to='/edit') +Create new note
     template(v-slot:footer) count of items: {{filteredCollection.length}}
       button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
-    template(#item="{ item: { title, date_create, id, text }, index }")
+    template(#item="{ item: { title, date_create, date_update, id, text }, index }")
       .item
         div id: {{id}}
         div
           nuxt-link(:to="'/note?id=' + id") Title: {{title}}
         div Text: {{text}}
-        div Created at: {{new Date(date_create)}}
+        div Date create: {{new Date(date_create*1000)}}
+        div Date update: {{new Date(date_update*1000)}}
     template(#tools="{item, index}")
       nuxt-link(:to="'/edit?id=' + item.id") 
         button.item-btn Edit
@@ -41,8 +42,10 @@ export default {
       collection: [],
       countOfItems: 10,
       date: "2020-12-07",
+      // date2: "2020-12-25",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
+      // inFormat2: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
     };
@@ -66,10 +69,6 @@ export default {
       this.countOfItems+=10;
     }
   },
-  mounted() {
-    // Get notes from vuex
-    // this.collection = this.$store.getters['getAllNotes']
-  },
   computed: {
     stylePrimary() {
       return {
@@ -83,19 +82,18 @@ export default {
     },
     filteredCollection() {
         const collection = this.$store.getters['getAllNotes'];
-
         function formatDate(date) {
           return new Date(date).setHours(0,0,0,0)
         }
 
-        // let filtered = this.collection.filter(item => {
-        //   if (formatDate(item.date_create) >= formatDate(this.date) && formatDate(item.date_create) <= formatDate(this.date2)) {
-        //     return item;
-        //   }
-        // })
-        // filtered = filtered.slice(0, this.countOfItems);
-        // return filtered;
-        return collection
+        let filtered = collection.filter(item => {
+          if (formatDate(item.date_create*1000) >= formatDate(this.date) && formatDate(item.date_create*1000) <= formatDate(this.date2)) {
+            return item;
+          }
+        })
+        filtered = filtered.slice(0, this.countOfItems);
+        return filtered;
+        // return collection
     }
   }
 };
