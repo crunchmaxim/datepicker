@@ -68,7 +68,7 @@ export default {
   },
   mounted() {
     // Get notes from vuex
-    this.collection = this.$store.getters['getAllNotes']
+    // this.collection = this.$store.getters['getAllNotes']
   },
   computed: {
     stylePrimary() {
@@ -82,6 +82,8 @@ export default {
       }
     },
     filteredCollection() {
+        const collection = this.$store.getters['getAllNotes'];
+
         function formatDate(date) {
           return new Date(date).setHours(0,0,0,0)
         }
@@ -93,7 +95,7 @@ export default {
         // })
         // filtered = filtered.slice(0, this.countOfItems);
         // return filtered;
-        return this.collection
+        return collection
     }
   }
 };
