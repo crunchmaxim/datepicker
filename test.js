@@ -1,5 +1,3 @@
-const { format, isValid, parse } = require("date-fns");
+const a = '2020-12-28'
 
-let value = "Dec 25, 2008"
-
-console.log(new Date(value).getTime())
+console.log(new Date(a))

@@ -7,12 +7,15 @@
     template(v-slot:header) Some header
     template(v-slot:footer) count of items: {{filteredCollection.length}}
       button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
-    template(#item="{ item: { title, date }, index }") 
-      | Заголовок {{title}} 
-      br
-      | {{date}}
+    template(#item="{ item: { title, date_create, id }, index }")
+      .item
+        div id: {{id}}
+        div
+          nuxt-link(:to="'/note?id=' + id") Title: {{title}}
+        div Date create {{date_create}}
     template(#tools="{item, index}") 
-      button(@click="onClickDelete(item, index)") {{item.title}}
+      button.item-btn(@click="onClickEdit(item)") Edit
+      button.item-btn(@click="onClickDelete(item, index)") Delete
 
   Nuxt
 </template>
@@ -28,11 +31,8 @@ export default {
   },
   data() {
     return {
-      collection: [{id: 1, title: "title 1", date: "2020-12-07" }, {id: 2, title: "title 2", date: "2020-12-08"}, 
-      {id: 3, title: "title 3", date: "2020-12-09"}, {id: 4, title: "title 4", date: "2020-12-10" }, 
-      {id: 5, title: "title 5", date: "2020-12-11" }, {id: 6, title: "title 6", date: "2020-12-12" }, {id: 7, title: "title 7", date: "2020-12-13" },
-      {id: 8, title: "title 8", date: "2020-12-14" }, {id: 9, title: "title 9", date: "2020-12-15" }, {id: 10, title: "title 10", date: "2020-12-16" },
-      {id: 11, title: "title 11", date: "2020-12-17" }, {id: 12, title: "title 12", date: "2020-12-18" }],
+      collection: [{id: 1, title: "title 1", date_create: "2020-12-07" }, {id: 2, title: "title 2", date_create: "2020-12-08"}, 
+      {id: 3, title: "title 3", date_create: "2020-12-09"}, {id: 4, title: "title 4", date_create: "2020-12-10" }],
       countOfItems: 10,
       date: "2020-12-07",
       date2: Date.now(),
@@ -42,6 +42,9 @@ export default {
     };
   },
   methods: {
+    onClickEdit(item) {
+      console.log(item)
+    },
     onClickDelete (item, index) {
       this.collection.splice(this.collection.indexOf(item), 1)
     },
@@ -54,6 +57,9 @@ export default {
     showMore() {
       this.countOfItems+=10;
     }
+  },
+  mounted() {
+    this.$store.dispatch('fetchAllNotes')
   },
   computed: {
     stylePrimary() {
@@ -72,7 +78,7 @@ export default {
       }
 
       let filtered = this.collection.filter(item => {
-        if (formatDate(item.date) >= formatDate(this.date) && formatDate(item.date) <= formatDate(this.date2)) {
+        if (formatDate(item.date_create) >= formatDate(this.date) && formatDate(item.date_create) <= formatDate(this.date2)) {
           return item;
         }
       })
@@ -136,5 +142,25 @@ html {
 
 .picker-wrapper {
   display: flex;
+}
+
+.item {
+  padding: 5px;
+}
+
+.item-btn {
+  height: 100%;
+  border-radius: 5px;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>
