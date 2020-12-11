@@ -1,5 +1,6 @@
 export const state = () => ({
-    notes: []
+    notes: [],
+    filter: ''
 })
 
 export const mutations = {
@@ -9,6 +10,10 @@ export const mutations = {
     setNotes(state, notes) {
         state.notes = [];
         state.notes = notes;
+    },
+
+    filterNotes(state, value) {
+        state.filter = value
     }
 }
 
@@ -63,12 +68,21 @@ export const actions = {
         } catch (error) {
             console.log(error)
         }
+    },
+
+    // Search notes by titles
+    filterNotesByTitle({commit}, value) {
+        commit('filterNotes', value)
     }
 }
 
 export const getters = {
-    getAllNotes(state) {
-        return state.notes
+    filter: s => s.filter,
+    getAllNotes(state, getters) {
+        return state.notes.slice().filter(({ title, text }) => getters.filter ? (() => {
+            return title.toLowerCase().startsWith(getters.filter.toLowerCase()) ||
+            text.toLowerCase().startsWith(getters.filter.toLowerCase())
+        })() : true) 
     },
     getOneNote: state => id => {
         return state.notes.filter(note => note.id == id)[0]

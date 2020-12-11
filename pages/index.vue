@@ -5,6 +5,7 @@
     date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
   items-list(:collection="filteredCollection" tag="ul" item-tag="li")
     template(v-slot:header) Some header
+      search-input
       .create-new-note
         h3
           nuxt-link(to='/edit') +Create new note
@@ -27,11 +28,13 @@
 <script>
 import DatePicker from "@/components/DatePicker";
 import ItemsList from "@/components/ItemsList";
+import SearchInput from "@/components/SearchInput";
 
 export default {
   components: {
     DatePicker,
-    ItemsList
+    ItemsList,
+    SearchInput
   },
   // Fetch data from API
   // async asyncData({ store }) {
