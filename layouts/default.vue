@@ -51,4 +51,8 @@ html {
   color: #fff;
   background-color: #35495e;
 }
+
+.home-link {
+    color: black;
+}
 </style>

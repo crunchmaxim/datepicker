@@ -5,17 +5,22 @@
     date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
   items-list(:collection="filteredCollection" tag="ul" item-tag="li")
     template(v-slot:header) Some header
+      .create-new-note
+        h3
+          nuxt-link(to='/edit') +Create new note
     template(v-slot:footer) count of items: {{filteredCollection.length}}
       button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
-    template(#item="{ item: { title, date_create, id }, index }")
+    template(#item="{ item: { title, date_create, id, text }, index }")
       .item
         div id: {{id}}
         div
           nuxt-link(:to="'/note?id=' + id") Title: {{title}}
-        div Date create {{date_create}}
-    template(#tools="{item, index}") 
-      button.item-btn(@click="onClickEdit(item)") Edit
-      button.item-btn(@click="onClickDelete(item, index)") Delete
+        div Text: {{text}}
+        div Created at: {{new Date(date_create)}}
+    template(#tools="{item, index}")
+      nuxt-link(:to="'/edit?id=' + item.id") 
+        button.item-btn Edit
+      button.item-btn(@click="onClickDelete(item.id)") Delete
 </template>
 
 <script>
@@ -27,10 +32,13 @@ export default {
     DatePicker,
     ItemsList
   },
+  // Fetch data from API
+  // async asyncData({ store }) {
+  //   await store.dispatch('fetchAllNotes')
+  // },
   data() {
     return {
-      collection: [{id: 1, title: "title 1", date_create: "2020-12-07" }, {id: 2, title: "title 2", date_create: "2020-12-08"}, 
-      {id: 3, title: "title 3", date_create: "2020-12-09"}, {id: 4, title: "title 4", date_create: "2020-12-10" }],
+      collection: [],
       countOfItems: 10,
       date: "2020-12-07",
       date2: Date.now(),
@@ -43,8 +51,10 @@ export default {
     onClickEdit(item) {
       console.log(item)
     },
-    onClickDelete (item, index) {
-      this.collection.splice(this.collection.indexOf(item), 1)
+    onClickDelete (id) {
+      this.$store.dispatch('deleteOneNote', id)
+      // console.log(item.id)
+      // this.collection.splice(this.collection.indexOf(item), 1)
     },
     disableDaysStart(day) {
       return day > new Date(this.date2);
@@ -57,7 +67,8 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('fetchAllNotes')
+    // Get notes from vuex
+    this.collection = this.$store.getters['getAllNotes']
   },
   computed: {
     stylePrimary() {
@@ -71,16 +82,18 @@ export default {
       }
     },
     filteredCollection() {
-      function formatDate(date) {
-        return new Date(date).setHours(0,0,0,0)
-      }
-
-      let filtered = this.collection.filter(item => {
-        if (formatDate(item.date_create) >= formatDate(this.date) && formatDate(item.date_create) <= formatDate(this.date2)) {
-          return item;
+        function formatDate(date) {
+          return new Date(date).setHours(0,0,0,0)
         }
-      })
-      return filtered.slice(0, this.countOfItems);
+
+        // let filtered = this.collection.filter(item => {
+        //   if (formatDate(item.date_create) >= formatDate(this.date) && formatDate(item.date_create) <= formatDate(this.date2)) {
+        //     return item;
+        //   }
+        // })
+        // filtered = filtered.slice(0, this.countOfItems);
+        // return filtered;
+        return this.collection
     }
   }
 };
@@ -115,5 +128,10 @@ a {
   &:hover {
     text-decoration: underline;
   }
+}
+
+.create-new-note {
+  text-align: left;
+  padding-left: 38px; 
 }
 </style>
