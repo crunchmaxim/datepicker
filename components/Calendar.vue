@@ -203,7 +203,7 @@ export default {
 }
 
 .no-selected:hover {
-  background-color: #005caf;
+  background-color: #1565C0;
   color: #fff;
   border-radius: 50%;
   cursor: pointer;
@@ -220,7 +220,7 @@ export default {
   align-items: center;
   border-bottom: 1px solid black;
   height: 30px;
-  background-color #005CAF;
+  background-color #1565C0;
   color: #fff;
   font-size: 14px;
 
@@ -265,7 +265,7 @@ export default {
 
   &:hover {
     color: #fff;
-    background #005caf;
+    background #1565C0;
   }
 }
 </style>

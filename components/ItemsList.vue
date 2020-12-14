@@ -28,7 +28,7 @@ export default {
           this.$slots.header && h('div', { class: 'header' }, this.$slots.header),
           
           // Content
-          h(this.tag, this.collection.map((item, index) => {
+          h(this.tag, { class: "il__wrapper" }, this.collection.map((item, index) => {
             return h(this.itemTag, {
                 class: 'il__item'
             }, 
@@ -50,35 +50,28 @@ export default {
           this.$slots.footer && h('div', { class: 'footer'}, this.$slots.footer),
       ])
   }
-
-//   render: function (createElement) {
-//   return createElement(this.tag,[
-//         ...this.collection.map(item => {
-//             return createElement(this.itemTag, `Id: ${item.id}, Title: ${item.title}`)  
-//         })
-//     ]
-//   )
-// }
-
 };
 </script>
 
 <style lang="stylus">
     .il
-        margin-top 20px
-        background-color #005caf
-        padding 20px
-        color #fff
+        margin: 20px 0px;
+        background-color #fff
+        color #black
         display flex
         flex-flow column wrap
+        &__wrapper {
+          padding: 0px 10px;
+        }
         &__item
           display flex
           flex-flow row nowrap
           max-width 100%       
-          margin-top 5px   
+          margin-top 5px 
           &__content
             flex 1 1
-            border 1px solid #fff            
+            border 2px solid #1565C0
+            border-radius: 10px;           
           &__tools
             justify-self flex-end
         .header, .footer {

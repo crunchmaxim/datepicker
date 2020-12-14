@@ -60,7 +60,7 @@ export default {
         margin: 20px;
         padding: 20px;
         border-radius: 5px;
-        background-color: #005caf;
+        background-color: #1565C0;
         color: #fff;
     }
 
@@ -82,6 +82,10 @@ export default {
 
     .form-btn {
         margin-top: 20px;
-        font-size: 16px; 
+        font-size: 16px;
+        background-color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
     }
 </style>

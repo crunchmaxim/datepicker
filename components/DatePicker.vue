@@ -173,7 +173,7 @@ export default {
   transition: 0.3s all;
 
   &:focus {
-    background #005caf;
+    background #1565C0;
     color: #fff;
   }
 }

@@ -1,40 +1,42 @@
 <template lang="pug">
 .app
-  .picker-wrapper
-    date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
-    date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
-  items-list(:collection="filteredCollection" tag="ul" item-tag="li")
-    template(v-slot:header) 
-      div Some header
-      div.filter
-        div Datepicker mode: 
-        button.btn-filter(@click="setDatepickerMode('create')") By date create
-        button.btn-filter(@click="setDatepickerMode('update')") By date update
-      div.filter 
-        div Filter by: 
-        button.btn-filter(@click="setFilter('create')") Filter by date create
-        button.btn-filter(@click="setFilter('update')") Filter by date update
-      search-input
-      .current-filters
-        div(v-for="filter in currentFilters") {{filter}}
-        button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
-      .create-new-note
-        h3
-          nuxt-link(to='/edit') +Create new note
-    template(#item="{ item: { title, date_create, date_update, id, text }, index }")
-      .item
-        div id: {{id}}
-        div
-          nuxt-link(:to="'/note?id=' + id") Title: {{title}}
-        div Text: {{text}}
-        div Date create: {{new Date(date_create*1000)}}
-        div Date update: {{new Date(date_update*1000)}}
-    template(#tools="{item, index}")
-      nuxt-link(:to="'/edit?id=' + item.id") 
-        button.item-btn Edit
-      button.item-btn(@click="onClickDelete(item.id)") Delete
-    template(v-slot:footer) count of items: {{filteredCollection.length}}
-      .show-more(@click="showMore" v-if="collection.length > countOfItems") Show more +
+  .container
+    .picker-wrapper
+      date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
+      date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
+    items-list(:collection="filteredCollection" tag="ul" item-tag="li")
+      template(v-slot:header) 
+        h1 Item List
+        div.filter
+          div Datepicker mode: 
+          button.btn-filter(@click="setDatepickerMode('create')") By date create
+          button.btn-filter(@click="setDatepickerMode('update')") By date update
+        div.filter 
+          div Filter by: 
+          button.btn-filter(@click="setFilter('create')") Filter by date create
+          button.btn-filter(@click="setFilter('update')") Filter by date update
+        search-input
+        .current-filters
+          div(v-for="filter in currentFilters") {{filter}}
+          button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
+        .create-new-note
+          h2
+            nuxt-link(to='/edit') +Create new note
+      template(#item="{ item: { title, date_create, date_update, id, text }, index }")
+        .item
+          div id: {{id}}
+          div
+            nuxt-link.item-title(:to="'/note?id=' + id") Title: {{title}}
+          div.item-text Text: {{text}}
+          div.item-date Date create: {{new Date(date_create*1000)}}
+          div.item-date Date update: {{new Date(date_update*1000)}}
+      template(#tools="{item, index}")
+        nuxt-link(:to="'/edit?id=' + item.id") 
+          button.item-btn Edit
+        button.item-btn(@click="onClickDelete(item.id)") Delete
+      template(v-slot:footer) 
+        .count-info Count of items: {{filteredCollection.length}}
+        button.show-more(@click="showMore" v-if="collection.length > countOfItems") Show more +
 </template>
 
 <script>
@@ -205,7 +207,6 @@ export default {
 
 <style lang="stylus">
 .app {
-  margin: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -224,8 +225,8 @@ export default {
   border-radius: 5px;
   margin: 0 2px;
   cursor: pointer;
-  border: 1px solid #fff;
-  background-color #005caf;
+  border: 2px solid #1565C0;
+  background-color #1565C0;
   color: #fff;
   transition: 0.3s all; 
 
@@ -244,6 +245,12 @@ a {
   }
 }
 
+.item-title, .item-text {
+  color: black;
+  font-size: 20px;
+  font-weight: 500; 
+}
+
 .create-new-note {
   text-align: left;
   padding-left: 38px;
@@ -260,7 +267,7 @@ a {
   height: 30px;
   font-size: 16px;
   margin-bottom: 2px;
-  background: #005caf;
+  background: #005caf;  
   cursor pointer;
   border: 1px solid #fff;
   border-radius: 5px;
@@ -278,14 +285,6 @@ a {
   }
 }
 
-.show-more {
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .current-filters {
   margin-top: 10px;
   display: flex;
@@ -294,6 +293,43 @@ a {
 
   div {
     text-align right
+  }
+}
+
+.header {
+  background-color: #1565C0;
+  padding: 10px 20px;
+  color: #fff;
+}
+
+.item-text {
+  margin-bottom 25px;
+}
+
+.item-date {
+  font-size: 14px;
+}
+
+.count-info {
+  text-align: left;
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: 500; 
+}
+
+.show-more {
+  background-color: #1565C0;
+  border: 2px solid #1565C0;
+  color: #fff;
+  width: 180px;
+  height: 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s all; 
+
+  &:hover {
+    background-color: #fff;
+    color: #1565C0;
   }
 }
 </style>

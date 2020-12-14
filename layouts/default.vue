@@ -6,9 +6,11 @@
 
 </script>
 
-<style lang="stylus">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -54,5 +56,9 @@ html {
 
 .home-link {
     color: black;
+}
+
+.container {
+  padding: 0px 10px;
 }
 </style>

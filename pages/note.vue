@@ -28,7 +28,7 @@ export default {
         margin: 20px;
         padding: 20px;
         border-radius: 5px;
-        background-color: #005caf;
+        background-color: #1565C0;
         color: #fff;
     }
 </style>
