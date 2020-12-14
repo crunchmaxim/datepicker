@@ -8,11 +8,11 @@
       template(v-slot:header) 
         h1 Item List
         div.filter
-          div Datepicker mode: 
+          div Datepicker filter: 
           button.btn-filter(@click="setDatepickerMode('create')") By date create
           button.btn-filter(@click="setDatepickerMode('update')") By date update
         div.filter 
-          div Filter by: 
+          div Sort: 
           button.btn-filter(@click="setFilter('create')") Sort by date create
           button.btn-filter(@click="setFilter('update')") Sort by date update
         search-input
@@ -311,6 +311,7 @@ a {
 
 .item-date {
   font-size: 14px;
+  color: rgba(0, 0, 0, 0.8)
 }
 
 .count-info {
@@ -350,7 +351,7 @@ a {
   }
 }
 
-@media (max-width: 577px) {
+@media (max-width: 576px) {
   .picker-wrapper {
     width: 100%;
     flex-direction: column;
