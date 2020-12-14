@@ -4,7 +4,10 @@
     date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
     date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
   items-list(:collection="filteredCollection" tag="ul" item-tag="li")
-    template(v-slot:header) Some header
+    template(v-slot:header) 
+      div Some header
+      div.filter 
+        button.btn-filter(@click="setFilter") Filter by created date
       search-input
       .create-new-note
         h3
@@ -34,7 +37,7 @@ export default {
   components: {
     DatePicker,
     ItemsList,
-    SearchInput
+    SearchInput,
   },
   // Fetch data from API
   // async asyncData({ store }) {
@@ -51,54 +54,82 @@ export default {
       // inFormat2: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
+      filter: "",
     };
   },
   methods: {
     onClickEdit(item) {
-      console.log(item)
+      console.log(item);
     },
-    onClickDelete (id) {
-      this.$store.dispatch('deleteOneNote', id)
+    onClickDelete(id) {
+      this.$store.dispatch("deleteOneNote", id);
       // console.log(item.id)
       // this.collection.splice(this.collection.indexOf(item), 1)
     },
     disableDaysStart(day) {
       return day > new Date(this.date2);
     },
-    disableDaysEnd (day) {
+    disableDaysEnd(day) {
       return day < new Date(this.date);
     },
     showMore() {
-      this.countOfItems+=10;
-    }
+      this.countOfItems += 10;
+    },
+    setFilter() {
+      if (this.filter === "" || this.filter === "desc") {
+        return (this.filter = "asc");
+      } else {
+        return (this.filter = "desc");
+      }
+    },
   },
   computed: {
     stylePrimary() {
       return {
-      '--color': "#caffbf"
-      }
+        "--color": "#caffbf",
+      };
     },
     styleSecondary() {
       return {
-        '--color': "#9bf6ff"
-      }
+        "--color": "#9bf6ff",
+      };
     },
     filteredCollection() {
-        const collection = this.$store.getters['getAllNotes'];
-        function formatDate(date) {
-          return new Date(date).setHours(0,0,0,0)
-        }
+      const collection = this.$store.getters["getAllNotes"];
 
-        let filtered = collection.filter(item => {
-          if (formatDate(item.date_create*1000) >= formatDate(this.date) && formatDate(item.date_create*1000) <= formatDate(this.date2)) {
-            return item;
-          }
-        })
-        filtered = filtered.slice(0, this.countOfItems);
-        return filtered;
-        // return collection
-    }
-  }
+      // Asc/desc created date filter
+      if (this.filter === "asc") {
+        collection.sort((a, b) => {
+          return a.date_create - b.date_create;
+        });
+      } else if (this.filter === "desc") {
+        collection.sort((a, b) => {
+          return b.date_create - a.date_create;
+        });
+      }
+
+      function formatDate(date) {
+        return new Date(date).setHours(0, 0, 0, 0);
+      }
+
+      let filtered = collection.filter((item) => {
+        if (
+          formatDate(item.date_create * 1000) >= formatDate(this.date) &&
+          formatDate(item.date_create * 1000) <= formatDate(this.date2)
+        ) {
+          return item;
+        }
+      });
+      filtered = filtered.slice(0, this.countOfItems);
+
+
+      // filtered.sort((a, b) => {
+      //   return a.date_create - b.date_create
+      // });
+      
+      return filtered
+    },
+  },
 };
 </script>
 
@@ -106,7 +137,7 @@ export default {
 .app {
   margin: 20px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
 .picker-wrapper {
@@ -135,6 +166,11 @@ a {
 
 .create-new-note {
   text-align: left;
-  padding-left: 38px; 
+  padding-left: 38px;
+}
+
+.filter {
+  display: flex;
+  justify-content: flex-end;  
 }
 </style>
