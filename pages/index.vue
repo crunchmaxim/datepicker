@@ -25,7 +25,7 @@
         button.item-btn Edit
       button.item-btn(@click="onClickDelete(item.id)") Delete
     template(v-slot:footer) count of items: {{filteredCollection.length}}
-      button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
+      .show-more(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more +
 </template>
 
 <script>
@@ -54,7 +54,7 @@ export default {
       // inFormat2: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
-      filter: "",
+      filterMode: "",
     };
   },
   methods: {
@@ -76,10 +76,10 @@ export default {
       this.countOfItems += 10;
     },
     setFilter() {
-      if (this.filter === "" || this.filter === "desc") {
-        return (this.filter = "asc");
+      if (this.filterMode === "" || this.filterMode === "desc") {
+        return (this.filterMode = "asc");
       } else {
-        return (this.filter = "desc");
+        return (this.filterMode = "desc");
       }
     },
   },
@@ -95,40 +95,42 @@ export default {
       };
     },
     filteredCollection() {
-      let collection = this.$store.getters["getAllNotes"];
-      const filterText = this.$store.getters["filter"]
+      // let collection = this.$store.getters["getAllNotes"];
 
+      let collection = [...this.$store.getters["getAllNotes"]];
+
+      const filterText = this.$store.getters["filter"];
+
+      // Filter by search input
       if (filterText !== '') {
         collection = collection.slice().filter(note => {
           let a = note.title.toLowerCase()
           let b = filterText.toLowerCase()
-          // debugger;
           if (note.title.toLowerCase().startsWith(filterText.toLowerCase())) {
-            // debugger;
             return note
           } else if (note.text.toLowerCase().startsWith(filterText.toLowerCase())) {
-            // debugger;
             return note
           }
         })
       }
 
-
       // Asc/desc created date filter
-      if (this.filter === "asc") {
+      if (this.filterMode === "asc") {
         collection.sort((a, b) => {
           return a.date_create - b.date_create;
         });
-      } else if (this.filter === "desc") {
+      } else if (this.filterMode === "desc") {
         collection.sort((a, b) => {
           return b.date_create - a.date_create;
         });
       }
 
+      // Format date helper function
       function formatDate(date) {
         return new Date(date).setHours(0, 0, 0, 0);
       }
 
+      // Filter by dates
       let filtered = collection.filter((item) => {
         if (
           formatDate(item.date_create * 1000) >= formatDate(this.date) &&
@@ -139,12 +141,7 @@ export default {
       });
       filtered = filtered.slice(0, this.countOfItems);
 
-
-      // filtered.sort((a, b) => {
-      //   return a.date_create - b.date_create
-      // });
-      
-      return filtered
+      return filtered;
     },
   },
 };
@@ -174,6 +171,7 @@ export default {
   border: 1px solid #fff;
   background-color #005caf;
   color: #fff;
+  transition: 0.3s all; 
 
   &:hover {
     background-color: #fff;
@@ -201,14 +199,32 @@ a {
 }
 
 .btn-filter {
-  width: 185px;
+  width: 220px;
+  height: 30px;
+  font-size: 16px;
   margin-bottom: 2px;
-  background: #fff;
-  border: none;
+  background: #005caf;
   cursor pointer;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.3s all;
+
+  &:hover {
+    color: #005caf;
+    background-color: #fff;
+  } 
 
   &:focus {
     outline: none; 
+  }
+}
+
+.show-more {
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
   }
 }
 </style>

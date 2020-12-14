@@ -10,7 +10,7 @@
                     input(v-model="title", placeholder="Enter title" name="title" id="title")
                 .input-wrapper
                     label(for="text") Text:
-                    input(v-model="text", placeholder="Enter text" name="text" id="text")
+                    textarea(v-model="text", placeholder="Enter text" name="text" id="text")
                 button.form-btn Submit
 </template>
 
@@ -72,6 +72,10 @@ export default {
         input {
             width: 300px;
             height: 30px;
+            font-size: 16px; 
+        }
+
+        textarea {
             font-size: 16px; 
         } 
     }

@@ -29,9 +29,25 @@ export default {
 .search-input {
   display: flex;
   justify-content: flex-end;
+  align-items: center; 
 
   input {
+    width: 220px;
+    height: 30px;
     margin-left: 5px;
+    font-size: 16px;
+    background-color: #005caf;
+    border: 1px solid #fff;
+    color: #fff;
+    border-radius: 5px;
+
+    &::placeholder {
+      color: #fff;
+    }
+
+    &:focus {
+      outline: none; 
+    }
   }
 }
 </style>
