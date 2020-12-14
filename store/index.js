@@ -78,11 +78,14 @@ export const actions = {
 
 export const getters = {
     filter: s => s.filter,
-    getAllNotes(state, getters) {
-        return state.notes.slice().filter(({ title, text }) => getters.filter ? (() => {
-            return title.toLowerCase().startsWith(getters.filter.toLowerCase()) ||
-            text.toLowerCase().startsWith(getters.filter.toLowerCase())
-        })() : true) 
+    // getAllNotes(state, getters) {
+    //     return state.notes.slice().filter(({ title, text }) => getters.filter ? (() => {
+    //         return title.toLowerCase().startsWith(getters.filter.toLowerCase()) ||
+    //         text.toLowerCase().startsWith(getters.filter.toLowerCase())
+    //     })() : true) 
+    // },
+    getAllNotes(state) {
+        return state.notes
     },
     getOneNote: state => id => {
         return state.notes.filter(note => note.id == id)[0]

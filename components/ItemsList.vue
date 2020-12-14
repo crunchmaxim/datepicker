@@ -74,7 +74,8 @@ export default {
         &__item
           display flex
           flex-flow row nowrap
-          max-width 100%          
+          max-width 100%       
+          margin-top 5px   
           &__content
             flex 1 1
             border 1px solid #fff            

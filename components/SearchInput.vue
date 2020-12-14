@@ -20,7 +20,7 @@ export default {
     watch: {
         searchText: debounce(function () {
             this.$store.dispatch('filterNotesByTitle', this.searchText)            
-        }, 130)
+        }, 1300)
     }
 }
 </script>

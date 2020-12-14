@@ -1,6 +1,6 @@
 <template lang="pug">
 .calendar
-  button(@click="toggleOpen = !toggleOpen") open
+  button.btn-open(@click="toggleOpen = !toggleOpen") Calendar
   .wrapper(v-if="toggleOpen")
     .months
       span.arrow(@click="prevYear") &lt;&lt;
@@ -9,7 +9,8 @@
       span.arrow(@click="nextMonth") &gt;
       span.arrow(@click="nextYear") &gt;&gt;
     .days
-      .day(v-for="day in weekDays") {{day}}
+      .day(v-for="day in weekDays") 
+        span {{day}}
       .day(v-for="space of startWeekDay - 1", :key="-space")
         span
       .day(v-for="day of countOfDays", :key="day" v-bind:class="{'today': isToday(day)}")
@@ -169,4 +170,98 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+.date-picker {
+  position: relative;
+  margin: 0 20px;
+}
+
+.wrapper {
+  font-size 12px;
+  height: 250px;
+  width: 220px;
+  border: 1px solid black;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day {
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.no-selected {
+  transition: 0.5s all;
+}
+
+.no-selected:hover {
+  background-color: #005caf;
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: var(--color);
+  border-radius: 500%;
+}
+
+.months {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 1px solid black;
+  height: 30px;
+  background-color #005CAF;
+  color: #fff;
+  font-size: 14px;
+
+  div {
+    dispay: flex;
+  }
+
+  span {
+    cursor: pointer;
+  }
+}
+
+.error {
+  border: 1px solid red;
+  width: 200px;
+}
+
+.arrow:hover {
+  background-color: green;
+}
+
+.disabled {
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.today {
+  border: 2px solid red;
+}
+
+.btn-open {
+  width: 100%;
+  background-color: #fff;
+  margin-bottom 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s all; 
+
+  &:hover {
+    color: #fff;
+    background #005caf;
+  }
+}
+</style>

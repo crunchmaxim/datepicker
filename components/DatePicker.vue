@@ -166,100 +166,33 @@ export default {
 </script>
 
 <style lang="stylus">
-.date-picker {
-  position: relative;
-  margin: 0 20px;
-}
-
-.wrapper {
-  font-size 12px;
-  height: 250px;
-  width: 200px;
-  border: 1px solid black;
-}
-
 .date-input {
-  width: 200px;
-}
-
-.days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-}
-
-.day {
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-  }
-}
-
-.no-selected:hover {
-  background-color: yellow;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.selected {
-  background-color: var(--color);
-  border-radius: 500%;
-}
-
-.months {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-bottom: 1px solid black;
+  width: 220px;
   height: 30px;
-  background-color #005CAF;
-  color: #fff;
-  font-size: 14px;
+  font-size: 16px;
+  transition: 0.3s all;
 
-  div {
-    dispay: flex;
+  &:focus {
+    background #005caf;
+    color: #fff;
   }
-
-  span {
-    cursor: pointer;
-  }
-}
-
-.error {
-  border: 1px solid red;
-  width: 200px;
-}
-
-.arrow:hover {
-  background-color: green;
 }
 
 .close {
   border-radius: 50%;
-  border: 1px solid gray;
+  border: 1px solid black;
   height: 19px;
   width: 19px;
   position: absolute;
-  left: 180px;
-  top: 1px;
+  left: 198px;
+  top: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 
   &:hover {
-    background-color: green;
+    background-color: gray;
   }
-}
-
-.disabled {
-  background-color: gray;
-  border-radius: 50%;
-}
-
-.today {
-  border: 2px solid red;
 }
 </style>

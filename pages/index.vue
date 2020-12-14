@@ -7,13 +7,11 @@
     template(v-slot:header) 
       div Some header
       div.filter 
-        button.btn-filter(@click="setFilter") Filter by created date
+        button.btn-filter(@click="setFilter") Filter by date create
       search-input
       .create-new-note
         h3
           nuxt-link(to='/edit') +Create new note
-    template(v-slot:footer) count of items: {{filteredCollection.length}}
-      button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
     template(#item="{ item: { title, date_create, date_update, id, text }, index }")
       .item
         div id: {{id}}
@@ -26,6 +24,8 @@
       nuxt-link(:to="'/edit?id=' + item.id") 
         button.item-btn Edit
       button.item-btn(@click="onClickDelete(item.id)") Delete
+    template(v-slot:footer) count of items: {{filteredCollection.length}}
+      button(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more
 </template>
 
 <script>
@@ -95,7 +95,24 @@ export default {
       };
     },
     filteredCollection() {
-      const collection = this.$store.getters["getAllNotes"];
+      let collection = this.$store.getters["getAllNotes"];
+      const filterText = this.$store.getters["filter"]
+
+      if (filterText !== '') {
+        collection = collection.slice().filter(note => {
+          let a = note.title.toLowerCase()
+          let b = filterText.toLowerCase()
+          // debugger;
+          if (note.title.toLowerCase().startsWith(filterText.toLowerCase())) {
+            // debugger;
+            return note
+          } else if (note.text.toLowerCase().startsWith(filterText.toLowerCase())) {
+            // debugger;
+            return note
+          }
+        })
+      }
+
 
       // Asc/desc created date filter
       if (this.filter === "asc") {
@@ -149,10 +166,19 @@ export default {
 }
 
 .item-btn {
+  width: 60px;
   height: 100%;
   border-radius: 5px;
   margin: 0 2px;
   cursor: pointer;
+  border: 1px solid #fff;
+  background-color #005caf;
+  color: #fff;
+
+  &:hover {
+    background-color: #fff;
+    color: #005caf;
+  }
 }
 
 a {
@@ -172,5 +198,17 @@ a {
 .filter {
   display: flex;
   justify-content: flex-end;  
+}
+
+.btn-filter {
+  width: 185px;
+  margin-bottom: 2px;
+  background: #fff;
+  border: none;
+  cursor pointer;
+
+  &:focus {
+    outline: none; 
+  }
 }
 </style>
