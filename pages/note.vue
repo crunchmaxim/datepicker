@@ -3,11 +3,12 @@
     .note-wrapper
         .home-link-wrapper
             nuxt-link.home-link(to='/')  &lt; Home
-        h3 Note info
-        .note-field Id: {{note.id}}
-        .note-field Title: {{note.title}}
-        .note-field Text: {{note.text}}
-        .note-field Date create {{note.date_create}}
+        .note-info Note info
+        .note-field.title Title: {{note.title}}
+        .note-field.text Text: {{note.text}}
+        .note-field Date create: {{new Date(note.date_create*1000).toUTCString()}}
+        .note-field Date update: {{new Date(note.date_create*1000).toUTCString()}}
+
 </template>
 
 <script>
@@ -31,5 +32,23 @@ export default {
         border-radius: 5px;
         background-color: #1565C0;
         color: #fff;
+    }
+
+    .note-field.title {
+        font-size: 20px;
+        font-weight: 500; 
+    }
+
+    .note-info {
+        font-size: 20px; 
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    .note-field.text {
+        margin-top: 10px;
+        margin-bottom: 25px;
+        font-size: 20px;
+        font-weight: 500; 
     }
 </style>

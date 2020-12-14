@@ -78,4 +78,17 @@ export default {
             text-align center
         }
 
+@media (max-width: 577px) {
+  .il__item {
+    flex-direction: column;
+    margin-bottom 40px;
+
+    &__tools {
+      margin-top: 5px;
+      display: flex;
+      justify-content: center;  
+    } 
+  }
+}
+
 </style>

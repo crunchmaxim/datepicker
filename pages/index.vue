@@ -13,8 +13,8 @@
           button.btn-filter(@click="setDatepickerMode('update')") By date update
         div.filter 
           div Filter by: 
-          button.btn-filter(@click="setFilter('create')") Filter by date create
-          button.btn-filter(@click="setFilter('update')") Filter by date update
+          button.btn-filter(@click="setFilter('create')") Sort by date create
+          button.btn-filter(@click="setFilter('update')") Sort by date update
         search-input
         .current-filters
           div(v-for="filter in currentFilters") {{filter}}
@@ -24,12 +24,11 @@
             nuxt-link(to='/edit') +Create new note
       template(#item="{ item: { title, date_create, date_update, id, text }, index }")
         .item
-          div id: {{id}}
           div
             nuxt-link.item-title(:to="'/note?id=' + id") Title: {{title}}
           div.item-text Text: {{text}}
-          div.item-date Date create: {{new Date(date_create*1000)}}
-          div.item-date Date update: {{new Date(date_update*1000)}}
+          div.item-date Date create: {{new Date(date_create*1000).toUTCString()}}
+          div.item-date Date update: {{new Date(date_update*1000).toUTCString()}}
       template(#tools="{item, index}")
         nuxt-link(:to="'/edit?id=' + item.id") 
           button.item-btn
@@ -307,6 +306,7 @@ a {
 
 .item-text {
   margin-bottom 25px;
+  margin-top: 10px;
 }
 
 .item-date {
@@ -347,6 +347,56 @@ a {
 
   .filter {
     margin-top: 10px;
+  }
+}
+
+@media (max-width: 577px) {
+  .picker-wrapper {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;  
+  }
+  
+  .date-picker {
+    margin-top: 20px;
+  }
+
+  .header {
+    width: 100%;
+  }
+
+  .filter {
+    flex-direction: column; 
+  }
+
+  .search-input {
+    flex-direction: column; 
+  }
+
+  .current-filters {
+    justify-content: center;
+    align-items: center; 
+  }
+
+  .item-btn {
+    width: 120px;
+    margin: 0 5px; 
+  }
+
+  .count-info {
+    text-align: center;
+    margin-left: 0px;
+  }
+
+  .input-wrapper {
+    input, textarea {
+      max-width: 100%;
+    }
+
+    textarea {
+      min-height: 150px;
+    }
   }
 }
 </style>
