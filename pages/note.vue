@@ -1,7 +1,8 @@
 <template lang="pug">
   .note-page 
-    nuxt-link.home-link(to="/") Home
     .note-wrapper
+        .home-link-wrapper
+            nuxt-link.home-link(to='/')  &lt; Home
         h3 Note info
         .note-field Id: {{note.id}}
         .note-field Title: {{note.title}}

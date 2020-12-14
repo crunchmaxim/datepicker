@@ -1,9 +1,9 @@
 <template lang="pug">
-    div Edit page
-        br
-        nuxt-link.home-link(to='/') Home from nuxt-link
+    div 
         .form-wrapper
-            h3 Create new note
+            .home-link-wrapper
+                nuxt-link.home-link(to='/')  &lt; Home
+            .create-new-note Create new note
             form(@submit.prevent="onSubmit")
                 .input-wrapper
                     label(for="title") Title:
@@ -59,7 +59,7 @@ export default {
     .form-wrapper {
         margin: 20px;
         padding: 20px;
-        border-radius: 5px;
+        border-radius: 10px;
         background-color: #1565C0;
         color: #fff;
     }
@@ -70,13 +70,14 @@ export default {
         flex-direction: column;
 
         input {
-            width: 300px;
+            width: 500px;
             height: 30px;
             font-size: 16px; 
         }
 
         textarea {
-            font-size: 16px; 
+            font-size: 16px;
+            width: 500px; 
         } 
     }
 
@@ -87,5 +88,21 @@ export default {
         border: none;
         cursor: pointer;
         border-radius: 5px;
+    }
+
+    .create-new-note {
+        font-size: 20px;
+        font-weight: 500; 
+        padding-left: 0px;
+    }
+
+    .home-link-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;   
+    }
+
+    .home-link {
+        color: #fff;
     }
 </style>

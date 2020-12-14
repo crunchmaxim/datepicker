@@ -32,8 +32,10 @@
           div.item-date Date update: {{new Date(date_update*1000)}}
       template(#tools="{item, index}")
         nuxt-link(:to="'/edit?id=' + item.id") 
-          button.item-btn Edit
-        button.item-btn(@click="onClickDelete(item.id)") Delete
+          button.item-btn
+            img(:src="require('../assets/img/edit.png')" class="btn-icon")
+        button.item-btn(@click="onClickDelete(item.id)")
+          img(:src="require('../assets/img/delete.png')" class="btn-icon")
       template(v-slot:footer) 
         .count-info Count of items: {{filteredCollection.length}}
         button.show-more(@click="showMore" v-if="collection.length > countOfItems") Show more +
@@ -213,6 +215,7 @@ export default {
 
 .picker-wrapper {
   display: flex;
+  padding-top: 20px;
 }
 
 .item {
@@ -330,6 +333,20 @@ a {
   &:hover {
     background-color: #fff;
     color: #1565C0;
+  }
+}
+
+.btn-icon {
+  width: 40px;
+}
+
+@media (max-width: 768px) {
+  .picker-wrapper {
+    justify-content: space-around;  
+  }
+
+  .filter {
+    margin-top: 10px;
   }
 }
 </style>
