@@ -44,6 +44,11 @@ export default {
     }
 
     &:focus {
+      background-color #fff
+      color: black;
+    }
+
+    &:focus {
       outline: none; 
     }
   }

@@ -252,12 +252,16 @@ export default {
 }
 
 .btn-open {
-  width: 100%;
+  width: 220px;
+  height: 30px;
   background-color: #fff;
   margin-bottom 10px;
   cursor: pointer;
   font-size: 16px;
-  transition: 0.3s all; 
+  transition: 0.3s all;
+  border: 1px solid black;
+  margin-top 1px;
+  border-radius: 5px; 
 
   &:hover {
     color: #fff;

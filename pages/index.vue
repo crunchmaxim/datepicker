@@ -34,7 +34,7 @@
         button.item-btn Edit
       button.item-btn(@click="onClickDelete(item.id)") Delete
     template(v-slot:footer) count of items: {{filteredCollection.length}}
-      .show-more(@click="showMore" v-if="filteredCollection.length == countOfItems") Show more +
+      .show-more(@click="showMore" v-if="collection.length > countOfItems") Show more +
 </template>
 
 <script>
@@ -48,19 +48,12 @@ export default {
     ItemsList,
     SearchInput,
   },
-  // Fetch data from API
-  // async asyncData({ store }) {
-  //   await store.dispatch('fetchAllNotes')
-  // },
   data() {
     return {
-      collection: [],
       countOfItems: 10,
       date: "2020-12-07",
-      // date2: "2020-12-25",
       date2: Date.now(),
       inFormat1: "yyyy-MM-dd",
-      // inFormat2: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
       filterMode: {type: '', variant: ''},
@@ -73,8 +66,6 @@ export default {
     },
     onClickDelete(id) {
       this.$store.dispatch("deleteOneNote", id);
-      // console.log(item.id)
-      // this.collection.splice(this.collection.indexOf(item), 1)
     },
     disableDaysStart(day) {
       return day > new Date(this.date2);
@@ -85,6 +76,8 @@ export default {
     showMore() {
       this.countOfItems += 10;
     },
+    
+    // Set filter mode
     setFilter(variant) {
       this.filterMode.variant = variant;
 
@@ -94,9 +87,13 @@ export default {
         return (this.filterMode.type = "desc");
       }
     },
+
+    // Set datepicker mode
     setDatepickerMode(variant) {
       this.datepickerVariant = variant;
     },
+
+    // Clear filters
     clearFilters() {
       this.datepickerVariant = "create";
       this.filterMode.type = "";
@@ -114,18 +111,21 @@ export default {
         "--color": "#9bf6ff",
       };
     },
+    // Collection from vuex
+    collection() {
+      return this.$store.getters["getAllNotes"]
+    },    
+    // Filtered collection
     filteredCollection() {
       // let collection = this.$store.getters["getAllNotes"];
 
-      let collection = [...this.$store.getters["getAllNotes"]];
+      let collection = this.$store.getters["getAllNotes"];
 
       const filterText = this.$store.getters["filter"];
 
       // Filter by search input
       if (filterText !== '') {
-        collection = collection.slice().filter(note => {
-          let a = note.title.toLowerCase()
-          let b = filterText.toLowerCase()
+        collection = collection.filter(note => {
           if (note.title.toLowerCase().startsWith(filterText.toLowerCase())) {
             return note
           } else if (note.text.toLowerCase().startsWith(filterText.toLowerCase())) {
@@ -186,6 +186,8 @@ export default {
         return filtered.slice(0, this.countOfItems);;
       }
     },
+
+    // Current using filters
     currentFilters() {
       let filters = [];
 
