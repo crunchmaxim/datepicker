@@ -6,9 +6,18 @@
   items-list(:collection="filteredCollection" tag="ul" item-tag="li")
     template(v-slot:header) 
       div Some header
+      div.filter
+        div Datepicker mode: 
+        button.btn-filter(@click="setDatepickerMode('create')") By date create
+        button.btn-filter(@click="setDatepickerMode('update')") By date update
       div.filter 
-        button.btn-filter(@click="setFilter") Filter by date create
+        div Filter by: 
+        button.btn-filter(@click="setFilter('create')") Filter by date create
+        button.btn-filter(@click="setFilter('update')") Filter by date update
       search-input
+      .current-filters
+        div(v-for="filter in currentFilters") {{filter}}
+        button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
       .create-new-note
         h3
           nuxt-link(to='/edit') +Create new note
@@ -54,7 +63,8 @@ export default {
       // inFormat2: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
-      filterMode: "",
+      filterMode: {type: '', variant: ''},
+      datepickerVariant: "create",
     };
   },
   methods: {
@@ -75,13 +85,23 @@ export default {
     showMore() {
       this.countOfItems += 10;
     },
-    setFilter() {
-      if (this.filterMode === "" || this.filterMode === "desc") {
-        return (this.filterMode = "asc");
+    setFilter(variant) {
+      this.filterMode.variant = variant;
+
+      if (this.filterMode.type === "" || this.filterMode.type === "desc") {
+        return (this.filterMode.type = "asc");
       } else {
-        return (this.filterMode = "desc");
+        return (this.filterMode.type = "desc");
       }
     },
+    setDatepickerMode(variant) {
+      this.datepickerVariant = variant;
+    },
+    clearFilters() {
+      this.datepickerVariant = "create";
+      this.filterMode.type = "";
+      this.filterMode.variant = "";
+    }
   },
   computed: {
     stylePrimary() {
@@ -115,14 +135,27 @@ export default {
       }
 
       // Asc/desc created date filter
-      if (this.filterMode === "asc") {
-        collection.sort((a, b) => {
-          return a.date_create - b.date_create;
+      if (this.filterMode.type === "asc") {
+        if (this.filterMode.variant === 'create') {
+          collection.sort((a, b) => {
+            return a.date_create - b.date_create;
+          });
+        } else {
+          collection.sort((a, b) => {
+            return a.date_update - b.date_update;
         });
-      } else if (this.filterMode === "desc") {
-        collection.sort((a, b) => {
-          return b.date_create - a.date_create;
+        }
+      } else if (this.filterMode.type === "desc") {
+        if (this.filterMode.variant === 'create') {
+          collection.sort((a, b) => {
+            return b.date_create - a.date_create;
+          });
+        } else {
+          collection.sort((a, b) => {
+            return b.date_update - a.date_update;
         });
+        }
+
       }
 
       // Format date helper function
@@ -130,18 +163,39 @@ export default {
         return new Date(date).setHours(0, 0, 0, 0);
       }
 
-      // Filter by dates
-      let filtered = collection.filter((item) => {
-        if (
-          formatDate(item.date_create * 1000) >= formatDate(this.date) &&
-          formatDate(item.date_create * 1000) <= formatDate(this.date2)
-        ) {
-          return item;
-        }
-      });
-      filtered = filtered.slice(0, this.countOfItems);
+      // Filter by dates and datepicker variant
+      if (this.datepickerVariant === 'create') {
+        let filtered = collection.filter((item) => {
+          if (
+            formatDate(item.date_create * 1000) >= formatDate(this.date) &&
+            formatDate(item.date_create * 1000) <= formatDate(this.date2)
+          ) {
+            return item;
+          }
+        });
+        return filtered.slice(0, this.countOfItems);;
+      } else if (this.datepickerVariant === 'update') {
+        let filtered = collection.filter((item) => {
+          if (
+            formatDate(item.date_update * 1000) >= formatDate(this.date) &&
+            formatDate(item.date_update * 1000) <= formatDate(this.date2)
+          ) {
+            return item;
+          }
+        });
+        return filtered.slice(0, this.countOfItems);;
+      }
+    },
+    currentFilters() {
+      let filters = [];
 
-      return filtered;
+      filters.push(`Datepicker vairant: ${this.datepickerVariant}`)
+
+      if (this.filterMode.variant !== '' && this.filterMode.type !== '') {
+        filters.push(`Filtered by: ${this.filterMode.variant} (${this.filterMode.type})`)
+      }
+
+      return filters;
     },
   },
 };
@@ -195,7 +249,8 @@ a {
 
 .filter {
   display: flex;
-  justify-content: flex-end;  
+  justify-content: flex-end;
+  align-items: center;   
 }
 
 .btn-filter {
@@ -209,6 +264,7 @@ a {
   border-radius: 5px;
   color: #fff;
   transition: 0.3s all;
+  margin-left: 5px;
 
   &:hover {
     color: #005caf;
@@ -225,6 +281,17 @@ a {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.current-filters {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; 
+
+  div {
+    text-align right
   }
 }
 </style>

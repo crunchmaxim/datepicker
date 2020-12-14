@@ -14,13 +14,10 @@ export default {
             searchText: ''
         }
     },
-    methods: {
-        
-    },
     watch: {
-        searchText: debounce(function () {
-            this.$store.dispatch('filterNotesByTitle', this.searchText)            
-        }, 1300)
+      searchText: debounce(function () {
+          this.$store.dispatch('filterNotesByTitle', this.searchText)            
+      }, 1300)
     }
 }
 </script>
@@ -30,6 +27,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center; 
+  margin-top: 10px;
 
   input {
     width: 220px;
