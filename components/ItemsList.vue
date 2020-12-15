@@ -91,7 +91,8 @@ export default {
 
     &__tools {
       margin-top: 5px;
-      display: flex;
+      flex-direction: row; 
+      // display: flex;
       justify-content: center;  
     } 
   }

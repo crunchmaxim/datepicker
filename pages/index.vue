@@ -64,9 +64,9 @@ export default {
     };
   },
   methods: {
-    onClickEdit(item) {
-      console.log(item);
-    },
+    // onClickEdit(item) {
+    //   console.log(item);
+    // },
     onClickDelete(id) {
       this.$store.dispatch("deleteOneNote", id);
     },
@@ -225,7 +225,7 @@ export default {
   padding: 0px;
   width: 40px;
   height: 40px;
-  border-radius: 5px;
+  border-radius: 10px;
   margin: 2px;
   cursor: pointer;
   border: 2px solid #1565C0;
@@ -268,7 +268,6 @@ a {
   color: black;
   font-size: 18px;
   padding-bottom: 30px;
-  // border-bottom: 1px solid gray;
 }
 
 .create-new-note {
@@ -343,8 +342,8 @@ a {
 }
 
 .show-more {
-  background-color: #2196f3;
-  border: 2px solid #2196f3;
+  background-color: #1565C0;
+  border: 2px solid #1565C0;
   color: #fff;
   width: 180px;
   height: 30px;
@@ -366,7 +365,8 @@ a {
 
 .header-content {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
+  align-items: baseline; 
 }
 
 @media (max-width: 768px) {
@@ -401,7 +401,21 @@ a {
 
   .current-filters {
     justify-content: center;
-    align-items: center; 
+    align-items: center;
+    min-height: 70px; 
+
+    div {
+      text-align: center;
+    }
+  }
+
+  .create-new-note {
+    flex-direction: column-reverse;
+    margin-top: 10px;
+
+    a {
+      margin-top: 10px;
+    } 
   }
 
   .item-btn {
@@ -422,6 +436,15 @@ a {
     textarea {
       min-height: 150px;
     }
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: center; 
+  }
+
+  .btn-filter {
+    margin-top: 10px;
   }
 }
 </style>

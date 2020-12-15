@@ -21,8 +21,12 @@ export const mutations = {
 export const actions = {
     // Fetch all notes when server init
     async nuxtServerInit ({ commit }) {
-        const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
-        commit('setNotes', response)
+        try {
+            const response = await this.$axios.$get('http://afs.alt-point.ru:8080/notes')
+            commit('setNotes', response)
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     // Fetch all notes action
