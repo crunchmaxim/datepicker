@@ -55,4 +55,20 @@ export default {
     .note-date {
         font-size: 14px; 
     }
+
+    .home-link-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;   
+    }
+
+    .home-link {
+        color: #fff;
+    }
+
+    @media (max-width: 576px) {
+        .note-wrapper {
+            padding: 8px;
+        }
+    }
 </style>

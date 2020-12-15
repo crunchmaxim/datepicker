@@ -65,13 +65,9 @@ export default {
         }
         &__item
           display flex
-
-          // flex-direction column
           flex-flow row nowrap
-
           max-width 100%       
           margin-top 5px
-          // border 2px solid #1565C0 
           &__content
             flex 1 1
             border-radius: 10px;
@@ -92,7 +88,6 @@ export default {
     &__tools {
       margin-top: 5px;
       flex-direction: row; 
-      // display: flex;
       justify-content: center;  
     } 
   }

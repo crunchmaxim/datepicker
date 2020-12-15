@@ -3,7 +3,8 @@
         .form-wrapper
             .home-link-wrapper
                 nuxt-link.home-link(to='/')  &lt; Home
-            .create-new-note Create new note
+            .create-new-note(v-if="this.$route.query.id") Edit note
+            .create-new-note(v-else) Create new note
             form(@submit.prevent="onSubmit")
                 .input-wrapper
                     label(for="title") Title:
@@ -79,8 +80,6 @@ export default {
             font-size: 16px;
             border-radius: 10px;
             border: none;
-            // margin-left: 10px;
-
             &:focus {
                 outline: none;
             } 
@@ -90,8 +89,6 @@ export default {
             font-size: 16px;
             width: 500px;
             border-radius: 10px;
-            // margin-left: 10px;
-
             &:focus {
                 outline: none;
             } 

@@ -64,9 +64,6 @@ export default {
     };
   },
   methods: {
-    // onClickEdit(item) {
-    //   console.log(item);
-    // },
     onClickDelete(id) {
       this.$store.dispatch("deleteOneNote", id);
     },
@@ -288,15 +285,12 @@ a {
   height: 30px;
   font-size: 16px;
   margin-bottom: 2px;
-  // background: #005caf;
   background: #2196f3;  
   cursor pointer;
-  // border: 1px solid #fff;
   border: none;
   border-radius: 10px;
   color: #fff;
   transition: 0.3s all;
-  // margin-left: 5px;
   margin-right: 10px; 
 
   &:hover {
@@ -354,7 +348,6 @@ a {
 
   &:hover {
     background-color: #fff;
-    // color: #1565C0;
     color: black;
   }
 }
