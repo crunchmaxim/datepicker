@@ -1,7 +1,7 @@
 <template lang="pug">
   .search-input
     label(for="searchInput") Search: 
-    input(v-model="searchText" placeholder="Enter title of note")
+    input(v-model="searchText" placeholder="Enter search text")
 </template>
 
 <script>
@@ -40,6 +40,7 @@ export default {
     color: #fff;
     border-radius: 10px;
     padding-left: 10px;
+    transition: 0.4s all; 
 
     &::placeholder {
       color: #fff;

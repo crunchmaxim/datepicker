@@ -24,11 +24,11 @@
           search-input
       template(#item="{ item: { title, date_create, date_update, id, text }, index }")
         .item
-          div
-            nuxt-link.item-title(:to="'/note?id=' + id") Title: {{title}}
-          div.item-text Text: {{text}}
-          div.item-date Date create: {{new Date(date_create*1000).toUTCString()}}
-          div.item-date Date update: {{new Date(date_update*1000).toUTCString()}}
+          div.item-title
+            nuxt-link(:to="'/note?id=' + id") {{title}}
+          div.item-text {{text}}
+          div.item-date Created: {{new Date(date_create*1000).toUTCString()}}
+          div.item-date Updated: {{new Date(date_update*1000).toUTCString()}}
       template(#tools="{item, index}")
         nuxt-link(:to="'/edit?id=' + item.id") 
           button.item-btn
@@ -247,10 +247,27 @@ a {
   }
 }
 
-.item-title, .item-text {
+.item-title {
   color: black;
   font-size: 20px;
-  font-weight: 500; 
+  font-weight: 500;
+  border-bottom: 1px solid gray;
+  margin-bottom: 10px;
+
+  a {
+    color: black;
+
+    &:hover {
+      text-decoration: none; 
+    }
+  }  
+}
+
+.item-text {
+  color: black;
+  font-size: 18px;
+  padding-bottom: 30px;
+  // border-bottom: 1px solid gray;
 }
 
 .create-new-note {
@@ -296,7 +313,8 @@ a {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; 
+  align-items: flex-start;
+  min-width: 230px; 
 
   div {
     text-align: left;
@@ -309,11 +327,6 @@ a {
   padding: 10px 20px;
   color: #fff;
   border-radius: 10px;
-}
-
-.item-text {
-  margin-bottom 25px;
-  margin-top: 10px;
 }
 
 .item-date {
