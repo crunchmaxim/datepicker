@@ -4,10 +4,10 @@
         .home-link-wrapper
             nuxt-link.home-link(to='/')  &lt; Home
         .note-info Note info
-        .note-field.title Title: {{note.title}}
-        .note-field.text Text: {{note.text}}
-        .note-field Date create: {{new Date(note.date_create*1000).toUTCString()}}
-        .note-field Date update: {{new Date(note.date_create*1000).toUTCString()}}
+        .note-title {{note.title}}
+        .note-text {{note.text}}
+        .note-date Created: {{new Date(note.date_create*1000).toUTCString()}}
+        .note-date Updated: {{new Date(note.date_create*1000).toUTCString()}}
 
 </template>
 
@@ -29,26 +29,30 @@ export default {
     .note-wrapper {
         margin: 20px;
         padding: 20px;
-        border-radius: 5px;
+        border-radius: 10px;
         background-color: #1565C0;
         color: #fff;
     }
 
-    .note-field.title {
+    .note-title {
         font-size: 20px;
-        font-weight: 500; 
+        font-weight: 500;
+        border-bottom: 1px solid #fff; 
     }
 
     .note-info {
-        font-size: 20px; 
+        font-size: 20px;    
         font-weight: 500;
         margin-bottom: 20px;
     }
 
-    .note-field.text {
+    .note-text {
         margin-top: 10px;
         margin-bottom: 25px;
-        font-size: 20px;
-        font-weight: 500; 
+        font-size: 18px;
+    }
+
+    .note-date {
+        font-size: 14px; 
     }
 </style>

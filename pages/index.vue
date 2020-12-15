@@ -402,7 +402,7 @@ a {
   .current-filters {
     justify-content: center;
     align-items: center;
-    min-height: 70px; 
+    min-height: 80px; 
 
     div {
       text-align: center;

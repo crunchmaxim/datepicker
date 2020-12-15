@@ -69,13 +69,17 @@ export default {
         display: flex;
         flex-direction: column;
 
+        label {
+            font-size: 18px; 
+        }
+
         input {
             width: 500px;
             height: 30px;
             font-size: 16px;
             border-radius: 10px;
             border: none;
-            margin-left: 10px;
+            // margin-left: 10px;
 
             &:focus {
                 outline: none;
@@ -86,7 +90,7 @@ export default {
             font-size: 16px;
             width: 500px;
             border-radius: 10px;
-            margin-left: 10px;
+            // margin-left: 10px;
 
             &:focus {
                 outline: none;
