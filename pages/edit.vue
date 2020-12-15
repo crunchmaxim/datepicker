@@ -72,22 +72,45 @@ export default {
         input {
             width: 500px;
             height: 30px;
-            font-size: 16px; 
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+            margin-left: 10px;
+
+            &:focus {
+                outline: none;
+            } 
         }
 
         textarea {
             font-size: 16px;
-            width: 500px; 
+            width: 500px;
+            border-radius: 10px;
+            margin-left: 10px;
+
+            &:focus {
+                outline: none;
+            } 
         } 
     }
 
     .form-btn {
         margin-top: 20px;
         font-size: 16px;
-        background-color: #fff;
+        background-color: #2196f3;
         border: none;
         cursor: pointer;
-        border-radius: 5px;
+        border-radius: 10px;
+        color: #fff;
+        width: 200px;
+        height: 30px;
+        transition: 0.3s all;
+        margin-left: 10px; 
+
+        &:hover {
+            background-color #fff;
+            color: black;
+        }
     }
 
     .create-new-note {

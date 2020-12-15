@@ -34,11 +34,13 @@ export default {
     height: 30px;
     margin-left: 5px;
     font-size: 16px;
-    background-color: #005caf;
-    border: 1px solid #fff;
+    background-color: #2196f3;
+    // border: 1px solid #fff;
+    border: none;
     color: #fff;
-    border-radius: 5px;
-
+    border-radius: 10px;
+    padding-left: 10px;
+  
     &::placeholder {
       color: #fff;
     }

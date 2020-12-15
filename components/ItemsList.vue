@@ -62,6 +62,10 @@ export default {
         flex-flow column wrap
         &__wrapper {
           padding: 0px 10px;
+
+
+          // display: flex;
+          // flex-wrap: wrap;  
         }
         &__item
           display flex
@@ -81,7 +85,7 @@ export default {
 @media (max-width: 577px) {
   .il__item {
     flex-direction: column;
-    margin-bottom 40px;
+    margin-bottom: 40px;
 
     &__tools {
       margin-top: 5px;

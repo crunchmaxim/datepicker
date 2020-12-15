@@ -222,7 +222,7 @@ export default {
   height: 30px;
   background-color #1565C0;
   color: #fff;
-  font-size: 14px;
+  font-size: 18px;
 
   div {
     dispay: flex;
@@ -257,7 +257,8 @@ export default {
   background-color: #fff;
   margin-bottom 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
+  font-weight: 500; 
   transition: 0.3s all;
   border: 1px solid black;
   margin-top 1px;

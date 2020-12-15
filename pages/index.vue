@@ -255,13 +255,14 @@ a {
 
 .create-new-note {
   text-align: left;
-  padding-left: 38px;
+  // padding-left: 38px;
 }
 
 .filter {
   display: flex;
   justify-content: flex-end;
-  align-items: center;   
+  align-items: center;
+  margin-top: 10px;   
 }
 
 .btn-filter {
@@ -269,16 +270,18 @@ a {
   height: 30px;
   font-size: 16px;
   margin-bottom: 2px;
-  background: #005caf;  
+  // background: #005caf;
+  background: #2196f3;  
   cursor pointer;
-  border: 1px solid #fff;
-  border-radius: 5px;
+  // border: 1px solid #fff;
+  border: none;
+  border-radius: 10px;
   color: #fff;
   transition: 0.3s all;
   margin-left: 5px;
 
   &:hover {
-    color: #005caf;
+    color: black;
     background-color: #fff;
   } 
 
@@ -302,6 +305,7 @@ a {
   background-color: #1565C0;
   padding: 10px 20px;
   color: #fff;
+  border-radius: 10px;
 }
 
 .item-text {
@@ -322,18 +326,20 @@ a {
 }
 
 .show-more {
-  background-color: #1565C0;
-  border: 2px solid #1565C0;
+  background-color: #2196f3;
+  border: 2px solid #2196f3;
   color: #fff;
   width: 180px;
   height: 30px;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s all; 
+  font-size: 16px; 
 
   &:hover {
     background-color: #fff;
-    color: #1565C0;
+    // color: #1565C0;
+    color: black;
   }
 }
 
@@ -344,10 +350,6 @@ a {
 @media (max-width: 768px) {
   .picker-wrapper {
     justify-content: space-around;  
-  }
-
-  .filter {
-    margin-top: 10px;
   }
 }
 
