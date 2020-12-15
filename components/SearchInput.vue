@@ -26,8 +26,8 @@ export default {
 .search-input {
   display: flex;
   justify-content: flex-end;
-  align-items: center; 
-  margin-top: 10px;
+  align-items: center;
+  margin-right: 10px;
 
   input {
     width: 220px;
@@ -40,7 +40,7 @@ export default {
     color: #fff;
     border-radius: 10px;
     padding-left: 10px;
-  
+
     &::placeholder {
       color: #fff;
     }

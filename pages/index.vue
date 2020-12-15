@@ -7,21 +7,21 @@
     items-list(:collection="filteredCollection" tag="ul" item-tag="li")
       template(v-slot:header) 
         h1 Item List
-        div.filter
-          div Datepicker filter: 
-          button.btn-filter(@click="setDatepickerMode('create')") By date create
-          button.btn-filter(@click="setDatepickerMode('update')") By date update
-        div.filter 
-          div Sort: 
-          button.btn-filter(@click="setFilter('create')") Sort by date create
-          button.btn-filter(@click="setFilter('update')") Sort by date update
-        search-input
-        .current-filters
-          div(v-for="filter in currentFilters") {{filter}}
-          button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
+        .header-content
+          .filter-wrapper
+            div.filter
+              button.btn-filter(@click="setDatepickerMode('create')") Filter by date create
+              button.btn-filter(@click="setDatepickerMode('update')") Filter by date update
+            div.filter 
+              button.btn-filter(@click="setFilter('create')") Sort by date create
+              button.btn-filter(@click="setFilter('update')") Sort by date update
+          .search-wrapper
+            .current-filters
+              div(v-for="filter in currentFilters") {{filter}}
+              button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
         .create-new-note
-          h2
-            nuxt-link(to='/edit') +Create new note
+          nuxt-link(to='/edit') +Create new note
+          search-input
       template(#item="{ item: { title, date_create, date_update, id, text }, index }")
         .item
           div
@@ -194,10 +194,10 @@ export default {
     currentFilters() {
       let filters = [];
 
-      filters.push(`Datepicker vairant: ${this.datepickerVariant}`)
+      filters.push(`Filtered by: ${this.datepickerVariant}`)
 
       if (this.filterMode.variant !== '' && this.filterMode.type !== '') {
-        filters.push(`Filtered by: ${this.filterMode.variant} (${this.filterMode.type})`)
+        filters.push(`Sorted by: ${this.filterMode.variant} (${this.filterMode.type})`)
       }
 
       return filters;
@@ -254,8 +254,9 @@ a {
 }
 
 .create-new-note {
-  text-align: left;
-  // padding-left: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  
 }
 
 .filter {
@@ -278,7 +279,8 @@ a {
   border-radius: 10px;
   color: #fff;
   transition: 0.3s all;
-  margin-left: 5px;
+  // margin-left: 5px;
+  margin-right: 10px; 
 
   &:hover {
     color: black;
@@ -294,10 +296,11 @@ a {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end; 
+  align-items: flex-start; 
 
   div {
-    text-align right
+    text-align: left;
+    width:100%;
   }
 }
 
@@ -345,6 +348,11 @@ a {
 
 .btn-icon {
   width: 40px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between; 
 }
 
 @media (max-width: 768px) {
