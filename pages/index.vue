@@ -222,10 +222,11 @@ export default {
 }
 
 .item-btn {
-  width: 60px;
-  height: 100%;
+  padding: 0px;
+  width: 40px;
+  height: 40px;
   border-radius: 5px;
-  margin: 0 2px;
+  margin: 2px;
   cursor: pointer;
   border: 2px solid #1565C0;
   background-color #1565C0;
@@ -360,7 +361,7 @@ a {
 }
 
 .btn-icon {
-  width: 40px;
+  width: 30px;
 }
 
 .header-content {

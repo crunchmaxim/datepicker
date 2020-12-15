@@ -24,7 +24,7 @@ export default {
 
   render: function(h) {
       return h('div', { class: 'il'}, [
-          // Footer
+          // Header
           this.$slots.header && h('div', { class: 'header' }, this.$slots.header),
           
           // Content
@@ -62,22 +62,24 @@ export default {
         flex-flow column wrap
         &__wrapper {
           padding: 0px 10px;
-
-
-          // display: flex;
-          // flex-wrap: wrap;  
         }
         &__item
           display flex
+
+          // flex-direction column
           flex-flow row nowrap
+
           max-width 100%       
-          margin-top 5px 
+          margin-top 5px
+          // border 2px solid #1565C0 
           &__content
             flex 1 1
-            border 2px solid #1565C0
-            border-radius: 10px;           
+            border-radius: 10px;
+            border 2px solid #1565C0 
           &__tools
             justify-self flex-end
+            display: flex;
+            flex-direction: column;
         .header, .footer {
             text-align center
         }
