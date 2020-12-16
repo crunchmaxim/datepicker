@@ -26,8 +26,8 @@
           date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
           date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
         .modal-filter__btn-wrapper  
-          button.modal-filter__btn Применить
-          button.modal-filter__btn-close Сбросить
+          button.modal-filter__btn(@click="onSetFilter") Применить
+          button.modal-filter__btn-close(@click="onClearFilter") Сбросить
         img.modal-filter__close(:src="require('../assets/img/close.png')" @click="openModalFilter = false")
   .container
     .picker-wrapper
@@ -103,8 +103,8 @@ export default {
   data() {
     return {
       countOfItems: 10,
-      date: "2020-12-07",
-      date2: Date.now(),
+      date: '',
+      date2: '',
       inFormat1: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
@@ -113,12 +113,28 @@ export default {
       openModalCreate: false,
       openModalConfirm: false,
       openModalFilter: false,
+      isFilterMode: false,
       title: "",
       text: "",
       editedId: null,
     };
   },
   methods: {
+    // Set date filter
+    onSetFilter() {
+      if (this.date !== '' && this.date2 !== '') {
+        this.isFilterMode = true
+        this.openModalFilter = false
+      }
+    },
+    // Clear date filter
+    onClearFilter() {
+      this.date = ''
+      this.date2 = ''
+      this.isFilterMode = false
+      this.openModalFilter = false
+    },
+
     // Create / edit note
     createNewNote() {
       if (this.editedId) {
@@ -251,8 +267,8 @@ export default {
       }
 
       // Filter by dates and datepicker variant
-      if (this.datepickerVariant === "create") {
-        let filtered = collection.filter((item) => {
+      if (this.isFilterMode) {
+                let filtered = collection.filter((item) => {
           if (
             formatDate(item.date_create * 1000) >= formatDate(this.date) &&
             formatDate(item.date_create * 1000) <= formatDate(this.date2)
@@ -261,17 +277,31 @@ export default {
           }
         });
         return filtered;
-      } else if (this.datepickerVariant === "update") {
-        let filtered = collection.filter((item) => {
-          if (
-            formatDate(item.date_update * 1000) >= formatDate(this.date) &&
-            formatDate(item.date_update * 1000) <= formatDate(this.date2)
-          ) {
-            return item;
-          }
-        });
-        return filtered;
       }
+
+      return collection;
+
+      // if (this.datepickerVariant === "create") {
+      //   let filtered = collection.filter((item) => {
+      //     if (
+      //       formatDate(item.date_create * 1000) >= formatDate(this.date) &&
+      //       formatDate(item.date_create * 1000) <= formatDate(this.date2)
+      //     ) {
+      //       return item;
+      //     }
+      //   });
+      //   return filtered;
+      // } else if (this.datepickerVariant === "update") {
+      //   let filtered = collection.filter((item) => {
+      //     if (
+      //       formatDate(item.date_update * 1000) >= formatDate(this.date) &&
+      //       formatDate(item.date_update * 1000) <= formatDate(this.date2)
+      //     ) {
+      //       return item;
+      //     }
+      //   });
+      //   return filtered;
+      // }
     },
 
     // Current using filters
