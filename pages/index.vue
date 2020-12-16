@@ -6,7 +6,7 @@
         .modal-create__title {{ editedId ? 'Редактировать заметку' : 'Создать заметку'}}
         input.modal-create__input(placeholder="Заголовок" v-model="title")
         textarea.modal-create__textarea(placeholder="Введите Ваш текст" v-model="text")
-        button.modal-create__btn(@click="createNewNote()") Создать
+        button.modal-create__btn(@click="createNewNote()") {{ editedId ? 'Сохранить' : 'Создать'}}
         img.modal-create__close(:src="require('../assets/img/close.png')" @click="openModalConfirm = true")
   modal-component(v-if="openModalConfirm")
     template
@@ -29,7 +29,7 @@
             img(:src="require('../assets/img/plus.png')")
             span Создать
     .notes-wrapper 
-      note-component(v-for="note in filteredCollection" :note="note" @editNote="editNote(note)")
+      note-component(v-for="note in filteredCollection" :note="note" @editNote="editNote(note)" @deleteNote="onClickDelete(note.id)")
 
 
 
@@ -123,7 +123,9 @@ export default {
           text: this.text,
         });
       }
-
+      
+      this.title = "";
+      this.text = "";
       this.editedId = null;
       this.openModalCreate = false;
     },
@@ -328,10 +330,10 @@ $white = #FFF;
 
 .notes-wrapper {
   margin-top: 40px;
-  display: flex;
-  flex-flow: column wrap;
+  // display: flex;
+  // flex-flow: column wrap;
   // flex-flow: row wrap;
-  height: 2000px;
+  // height: 2000px;
 }
 
 .modal-create {

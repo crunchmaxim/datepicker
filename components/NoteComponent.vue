@@ -6,7 +6,7 @@
         .note__date {{note.date_create}}
         .note__icons
           img(:src="require('../assets/img/edit.png')" @click="$emit('editNote')")
-          img(:src="require('../assets/img/delete.png')")
+          img(:src="require('../assets/img/delete.png')" @click="$emit('deleteNote')")
 </template>
 
 <script>
