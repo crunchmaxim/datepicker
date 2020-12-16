@@ -17,14 +17,26 @@
         .modal-confirm__btn-wrapper
           button.modal-confirm__btn(@click="openModalConfirm = false") Вернуться
           button.modal-confirm__btn-close(@click="() => {openModalConfirm = false; openModalCreate = false;}") Закрыть
+  modal-component(v-if="openModalFilter")
+    template
+      .modal-filter
+        .modal-filter__title Отфильтровать
+        .modal-filter__subtitle По дате
+        .modal-filter__datepickers
+          date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
+          date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
+        .modal-filter__btn-wrapper  
+          button.modal-filter__btn Применить
+          button.modal-filter__btn-close Сбросить
+        img.modal-filter__close(:src="require('../assets/img/close.png')" @click="openModalFilter = false")
   .container
     .picker-wrapper
-      date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
-      date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
+      //- date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
+      //- date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
     .header
         .header__title  Мои заметки
         .header__content
-          search-input
+          search-input(@onFilterClick="openModalFilter = true")
           button.header__create-note(@click="openModalCreate = true") 
             img(:src="require('../assets/img/plus.png')")
             span Создать
@@ -100,6 +112,7 @@ export default {
       datepickerVariant: "create",
       openModalCreate: false,
       openModalConfirm: false,
+      openModalFilter: false,
       title: "",
       text: "",
       editedId: null,
@@ -321,6 +334,8 @@ $white = #FFF;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;  
 
     img {
       margin-right: 8px;
@@ -440,6 +455,66 @@ $white = #FFF;
     border: 2px solid $pink;
     margin-left: 10px;
     cursor: pointer;
+  }
+}
+
+.modal-filter {
+  width: 500px;
+  height: 260px;
+  padding: 40px;
+  border-radius: 5px;
+  color: $black;
+  position: relative;   
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+  } 
+
+  &__subtitle {
+    font-size: 18px;
+    margin-top: 20px; 
+  }
+
+  &__datepickers {
+    display: flex;
+    margin-top: 20px; 
+  }
+
+  &__btn-wrapper {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  &__btn {
+    width: 150px;
+    height: 40px;
+    background-color: $pink;
+    font-size: 14px;
+    color: $white;
+    border: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    cursor: pointer; 
+  }
+
+  &__btn-close {
+    background-color: #fff;
+    border:2px solid $pink;
+    border-radius: 15px;
+    color: $pink;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    margin-left: 20px; 
+  }
+
+  &__close {
+    position: absolute;
+    width: 16px;
+    top: 24px;
+    right: 24px;
+    cursor: pointer; 
   }
 }
 

@@ -1,7 +1,7 @@
 <template lang="pug">
 .date-picker
   input.date-input(placeholder="Choose date", maxlength=10 v-model="date" @change="changeInputDate")
-  span.close(@click="date = ''") &#10005;
+  //- span.close(@click="date = ''") &#10005;
   
   .error(v-if="showError") {{ error }}
   Calendar(
@@ -167,14 +167,19 @@ export default {
 
 <style lang="stylus">
 .date-input {
-  width: 220px;
-  height: 30px;
-  font-size: 16px;
+  width: 200px;
+  height: 40px;
+  font-size: 14px;
   transition: 0.3s all;
+  color: #333438;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+  padding-left: 15px;
+  margin-right: 20px;
 
   &:focus {
-    background #1565C0;
-    color: #fff;
+    outline: none;
   }
 }
 

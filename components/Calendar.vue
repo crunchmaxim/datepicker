@@ -1,6 +1,6 @@
 <template lang="pug">
 .calendar
-  button.btn-open(@click="toggleOpen = !toggleOpen") Calendar
+  img.calendar__icon(:src="require('../assets/img/calendar.png')" @click="toggleOpen = !toggleOpen")
   .wrapper(v-if="toggleOpen")
     .months
       span.arrow(@click="prevYear") &lt;&lt;
@@ -171,16 +171,35 @@ export default {
 </script>
 
 <style lang="stylus">
+.calendar {
+  position: relative;
+  width: 200px;
+  // background-color: #fff;
+
+
+  &__icon {
+    position: absolute;
+    top: -28px;
+    right: 12px;
+    cursor: pointer;
+  } 
+}
+
 .date-picker {
   position: relative;
-  margin: 0 20px;
+  // margin: 0 20px;
 }
 
 .wrapper {
   font-size 12px;
   height: 250px;
-  width: 220px;
-  border: 1px solid black;
+  width: 100%;
+  // border: 1px solid black;
+  position: absolute;
+  background-color: #fff;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15); 
 }
 
 .days {
@@ -203,7 +222,7 @@ export default {
 }
 
 .no-selected:hover {
-  background-color: #1565C0;
+  background-color: #FF598B;;
   color: #fff;
   border-radius: 50%;
   cursor: pointer;
@@ -220,7 +239,7 @@ export default {
   align-items: center;
   border-bottom: 1px solid black;
   height: 30px;
-  background-color #1565C0;
+  background-color: #FF598B;
   color: #fff;
   font-size: 18px;
 
@@ -238,8 +257,13 @@ export default {
   width: 200px;
 }
 
+.arrow {
+  transition: 0.4s all; 
+}
+
 .arrow:hover {
-  background-color: green;
+  background-color: #fff;
+  color: #FF598B;
 }
 
 .disabled {
