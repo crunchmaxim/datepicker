@@ -7,6 +7,7 @@
 </script>
 
 <style>
+
 html {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -21,6 +22,7 @@ html {
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
 .button--green {
@@ -54,9 +56,5 @@ html {
 
 .home-link {
     color: black;
-}
-
-.container {
-  padding: 0px 10px;
 }
 </style>

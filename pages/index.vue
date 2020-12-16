@@ -1,42 +1,75 @@
 <template lang="pug">
 .app
+  modal-component(v-if="openModalCreate")
+    template
+      .modal-create
+        .modal-create__title {{ editedId ? 'Редактировать заметку' : 'Создать заметку'}}
+        input.modal-create__input(placeholder="Заголовок" v-model="title")
+        textarea.modal-create__textarea(placeholder="Введите Ваш текст" v-model="text")
+        button.modal-create__btn(@click="createNewNote()") Создать
+        img.modal-create__close(:src="require('../assets/img/close.png')" @click="openModalConfirm = true")
+  modal-component(v-if="openModalConfirm")
+    template
+      .modal-confirm
+        .modal-confirm__title 
+          div Вы уверены, что хотите закрыть окно? 
+          div В этом случае, изменения не сохранятся
+        .modal-confirm__btn-wrapper
+          button.modal-confirm__btn(@click="openModalConfirm = false") Вернуться
+          button.modal-confirm__btn-close(@click="() => {openModalConfirm = false; openModalCreate = false;}") Закрыть
   .container
     .picker-wrapper
       date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
       date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
-    items-list(:collection="filteredCollection" tag="ul" item-tag="li")
-      template(v-slot:header) 
-        h1 Item List
-        .header-content
-          .filter-wrapper
-            div.filter
-              button.btn-filter(@click="setDatepickerMode('create')") Filter by date create
-              button.btn-filter(@click="setDatepickerMode('update')") Filter by date update
-            div.filter 
-              button.btn-filter(@click="setFilter('create')") Sort by date create
-              button.btn-filter(@click="setFilter('update')") Sort by date update
-          .search-wrapper
-            .current-filters
-              div(v-for="filter in currentFilters") {{filter}}
-              button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
-        .create-new-note
-          nuxt-link(to='/edit') +Create new note
+    .header
+        .header__title  Мои заметки
+        .header__content
           search-input
-      template(#item="{ item: { title, date_create, date_update, id, text }, index }")
-        .item
-          div.item-title
-            nuxt-link(:to="'/note?id=' + id") {{title}}
-          div.item-text {{text}}
-          div.item-date Created: {{new Date(date_create*1000).toUTCString()}}
-          div.item-date Updated: {{new Date(date_update*1000).toUTCString()}}
-      template(#tools="{item, index}")
-        nuxt-link(:to="'/edit?id=' + item.id") 
-          button.item-btn
-            img(:src="require('../assets/img/edit.png')" class="btn-icon")
-        button.item-btn(@click="onClickDelete(item.id)")
-          img(:src="require('../assets/img/delete.png')" class="btn-icon")
+          button.header__create-note(@click="openModalCreate = true") 
+            img(:src="require('../assets/img/plus.png')")
+            span Создать
+    .notes-wrapper 
+      note-component(v-for="note in filteredCollection" :note="note" @editNote="editNote(note)")
+
+
+
+
+    //- items-list(:collection="filteredCollection" tag="ul" item-tag="li")
+    //-   template(v-slot:header)
+
+        //- .header-content
+        //-   .filter-wrapper
+        //-     div.filter
+        //-       button.btn-filter(@click="setDatepickerMode('create')") Filter by date create
+        //-       button.btn-filter(@click="setDatepickerMode('update')") Filter by date update
+        //-     div.filter 
+        //-       button.btn-filter(@click="setFilter('create')") Sort by date create
+        //-       button.btn-filter(@click="setFilter('update')") Sort by date update
+        //-   .search-wrapper
+        //-     .current-filters
+        //-       div(v-for="filter in currentFilters") {{}}
+        //-       button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
+        //- .create-new-note
+        //-   nuxt-link(to='/edit') +Create new note
+
+      //- template(#item="{ item: { title, date_create, date_update, id, text }, index }")
+      //-   .note
+      //-     .note-title {{}}
+      //-     .note-text {{}}
+      //-     .note-date {{()}}
+      //-     img(:src="require('../assets/img/edit.png')")
+      //-     img(:src="require('../assets/img/delete.png')")
+
+
+
+      //- template(#tools="{item, index}")
+      //-   nuxt-link(:to="'/edit?id=' + item.id") 
+      //-     button.item-btn
+      //-       img(:src="require('../assets/img/edit.png')" class="btn-icon")
+      //-   button.item-btn(@click="onClickDelete(item.id)")
+      //-     img(:src="require('../assets/img/delete.png')" class="btn-icon")
       template(v-slot:footer) 
-        .count-info Count of items: {{filteredCollection.length}}
+        .count-info Count of items: {{}}
         button.show-more(@click="showMore" v-if="collection.length > countOfItems") Show more +
 </template>
 
@@ -44,12 +77,16 @@
 import DatePicker from "@/components/DatePicker";
 import ItemsList from "@/components/ItemsList";
 import SearchInput from "@/components/SearchInput";
+import NoteComponent from "@/components/NoteComponent";
+import ModalComponent from "@/components/ModalComponent";
 
 export default {
   components: {
     DatePicker,
     ItemsList,
     SearchInput,
+    NoteComponent,
+    ModalComponent,
   },
   data() {
     return {
@@ -59,11 +96,45 @@ export default {
       inFormat1: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
-      filterMode: {type: '', variant: ''},
+      filterMode: { type: "", variant: "" },
       datepickerVariant: "create",
+      openModalCreate: false,
+      openModalConfirm: false,
+      title: "",
+      text: "",
+      editedId: null,
     };
   },
   methods: {
+    // Create / edit note
+    createNewNote() {
+      if (this.editedId) {
+        let payload = {
+          id: this.editedId,
+          note: {
+            title: this.title,
+            text: this.text,
+          },
+        };
+        this.$store.dispatch('updateOneNote', payload)
+      } else {
+        this.$store.dispatch("createNewNote", {
+          title: this.title,
+          text: this.text,
+        });
+      }
+
+      this.editedId = null;
+      this.openModalCreate = false;
+    },
+    editNote(note) {
+      (this.editedId = note.id),
+        (this.title = note.title),
+        (this.text = note.text),
+        (this.openModalCreate = true);
+    },
+
+    // Check index
     onClickDelete(id) {
       this.$store.dispatch("deleteOneNote", id);
     },
@@ -76,7 +147,7 @@ export default {
     showMore() {
       this.countOfItems += 10;
     },
-    
+
     // Set filter mode
     setFilter(variant) {
       this.filterMode.variant = variant;
@@ -98,7 +169,7 @@ export default {
       this.datepickerVariant = "create";
       this.filterMode.type = "";
       this.filterMode.variant = "";
-    }
+    },
   },
   computed: {
     stylePrimary() {
@@ -113,8 +184,8 @@ export default {
     },
     // Collection from vuex
     collection() {
-      return this.$store.getters["getAllNotes"]
-    },    
+      return this.$store.getters["getAllNotes"];
+    },
     // Filtered collection
     filteredCollection() {
       // let collection = this.$store.getters["getAllNotes"];
@@ -124,38 +195,39 @@ export default {
       const filterText = this.$store.getters["filter"];
 
       // Filter by search input
-      if (filterText !== '') {
-        collection = collection.filter(note => {
+      if (filterText !== "") {
+        collection = collection.filter((note) => {
           if (note.title.toLowerCase().startsWith(filterText.toLowerCase())) {
-            return note
-          } else if (note.text.toLowerCase().startsWith(filterText.toLowerCase())) {
-            return note
+            return note;
+          } else if (
+            note.text.toLowerCase().startsWith(filterText.toLowerCase())
+          ) {
+            return note;
           }
-        })
+        });
       }
 
       // Asc/desc created date filter
       if (this.filterMode.type === "asc") {
-        if (this.filterMode.variant === 'create') {
+        if (this.filterMode.variant === "create") {
           collection.sort((a, b) => {
             return a.date_create - b.date_create;
           });
         } else {
           collection.sort((a, b) => {
             return a.date_update - b.date_update;
-        });
+          });
         }
       } else if (this.filterMode.type === "desc") {
-        if (this.filterMode.variant === 'create') {
+        if (this.filterMode.variant === "create") {
           collection.sort((a, b) => {
             return b.date_create - a.date_create;
           });
         } else {
           collection.sort((a, b) => {
             return b.date_update - a.date_update;
-        });
+          });
         }
-
       }
 
       // Format date helper function
@@ -164,7 +236,7 @@ export default {
       }
 
       // Filter by dates and datepicker variant
-      if (this.datepickerVariant === 'create') {
+      if (this.datepickerVariant === "create") {
         let filtered = collection.filter((item) => {
           if (
             formatDate(item.date_create * 1000) >= formatDate(this.date) &&
@@ -173,8 +245,8 @@ export default {
             return item;
           }
         });
-        return filtered.slice(0, this.countOfItems);;
-      } else if (this.datepickerVariant === 'update') {
+        return filtered;
+      } else if (this.datepickerVariant === "update") {
         let filtered = collection.filter((item) => {
           if (
             formatDate(item.date_update * 1000) >= formatDate(this.date) &&
@@ -183,7 +255,7 @@ export default {
             return item;
           }
         });
-        return filtered.slice(0, this.countOfItems);;
+        return filtered;
       }
     },
 
@@ -191,10 +263,12 @@ export default {
     currentFilters() {
       let filters = [];
 
-      filters.push(`Filtered by: ${this.datepickerVariant}`)
+      filters.push(`Filtered by: ${this.datepickerVariant}`);
 
-      if (this.filterMode.variant !== '' && this.filterMode.type !== '') {
-        filters.push(`Sorted by: ${this.filterMode.variant} (${this.filterMode.type})`)
+      if (this.filterMode.variant !== "" && this.filterMode.type !== "") {
+        filters.push(
+          `Sorted by: ${this.filterMode.variant} (${this.filterMode.type})`
+        );
       }
 
       return filters;
@@ -204,6 +278,170 @@ export default {
 </script>
 
 <style lang="stylus">
+// Variables
+$black = #333438;
+$grey = #D8D8D8;
+$pink = #FF598B;
+$white = #FFF;
+
+.container {
+  // padding 0 140px
+  max-width: 1160px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: #fff;
+
+  &__title {
+    color: $black;
+    font-size: 36px;
+    font-weight: 500;
+    text-align: left;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__create-note {
+    width: 180px;
+    height: 40px;
+    background-color: $pink;
+    border-radius: 15px;
+    border: none;
+    margin-left: 30px;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    img {
+      margin-right: 8px;
+    }
+  }
+}
+
+.notes-wrapper {
+  margin-top: 40px;
+  display: flex;
+  flex-flow: column wrap;
+  // flex-flow: row wrap;
+  height: 2000px;
+}
+
+.modal-create {
+  width: 900px;
+  height: 700px;
+  border-radius: 5px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &__title {
+    font-size: 36px;
+    font-weight: 500;
+  }
+
+  &__input {
+    margin-top: 40px;
+    height: 60px;
+    border: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    font-size: 22px;
+    color: $black;
+    padding-left: 20px;
+  }
+
+  &__textarea {
+    margin-top: 20px;
+    height: 380px;
+    width: 100%;
+    font-size: 22px;
+    color: $black;
+    border: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    padding: 20px;
+  }
+
+  &__input, &__textarea {
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__btn {
+    width: 180px;
+    height: 40px;
+    background-color: $pink;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    margin-top: 40px;
+  }
+
+  &__close {
+    position: absolute;
+    right: 40px;
+    top: 47px;
+    cursor: pointer;
+  }
+}
+
+.modal-confirm {
+  width: 420px;
+  height: 200px;
+  padding: 40px 20px;
+  border-radius: 5px;
+
+  &__title {
+    font-size: 18px;
+    color: $black;
+  }
+
+  &__btn-wrapper {
+    margin-top: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__btn {
+    width: 150px;
+    height: 40px;
+    background-color: $pink;
+    color: #fff;
+    font-size: 14px;
+    // font-family: "Roboto"
+    border: none;
+    border-radius: 15px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  &__btn-close {
+    width: 150px;
+    height: 40px;
+    background-color: #fff;
+    border-radius: 15px;
+    font-size: 14px;
+    color: $pink;
+    border: 2px solid $pink;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}
+
+// ////////////////////////////////////////////////////
 .app {
   display: flex;
   flex-direction: column;
@@ -212,232 +450,5 @@ export default {
 .picker-wrapper {
   display: flex;
   padding-top: 20px;
-}
-
-.item {
-  padding: 5px;
-}
-
-.item-btn {
-  padding: 0px;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  margin: 2px;
-  cursor: pointer;
-  border: 2px solid #1565C0;
-  background-color #1565C0;
-  color: #fff;
-  transition: 0.3s all; 
-
-  &:hover {
-    background-color: #fff;
-    color: #005caf;
-  }
-}
-
-a {
-  color: #fff;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.item-title {
-  color: black;
-  font-size: 20px;
-  font-weight: 500;
-  border-bottom: 1px solid gray;
-  margin-bottom: 10px;
-
-  a {
-    color: black;
-
-    &:hover {
-      text-decoration: none; 
-    }
-  }  
-}
-
-.item-text {
-  color: black;
-  font-size: 18px;
-  padding-bottom: 30px;
-}
-
-.create-new-note {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;  
-}
-
-.filter {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;   
-}
-
-.btn-filter {
-  width: 220px;
-  height: 30px;
-  font-size: 16px;
-  margin-bottom: 2px;
-  background: #2196f3;  
-  cursor pointer;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  transition: 0.3s all;
-  margin-right: 10px; 
-
-  &:hover {
-    color: black;
-    background-color: #fff;
-  } 
-
-  &:focus {
-    outline: none; 
-  }
-}
-
-.current-filters {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 230px; 
-
-  div {
-    text-align: left;
-    width:100%;
-  }
-}
-
-.header {
-  background-color: #1565C0;
-  padding: 10px 20px;
-  color: #fff;
-  border-radius: 10px;
-}
-
-.item-date {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.8)
-}
-
-.count-info {
-  text-align: left;
-  margin-left: 10px;
-  font-size: 20px;
-  font-weight: 500; 
-}
-
-.show-more {
-  background-color: #1565C0;
-  border: 2px solid #1565C0;
-  color: #fff;
-  width: 180px;
-  height: 30px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s all; 
-  font-size: 16px; 
-
-  &:hover {
-    background-color: #fff;
-    color: black;
-  }
-}
-
-.btn-icon {
-  width: 30px;
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline; 
-}
-
-@media (max-width: 768px) {
-  .picker-wrapper {
-    justify-content: space-around;  
-  }
-}
-
-@media (max-width: 576px) {
-  .picker-wrapper {
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;  
-  }
-  
-  .date-picker {
-    margin-top: 20px;
-  }
-
-  .header {
-    width: 100%;
-  }
-
-  .filter {
-    flex-direction: column; 
-  }
-
-  .search-input {
-    flex-direction: column; 
-  }
-
-  .current-filters {
-    justify-content: center;
-    align-items: center;
-    min-height: 80px; 
-
-    div {
-      text-align: center;
-    }
-  }
-
-  .create-new-note {
-    flex-direction: column-reverse;
-    margin-top: 10px;
-
-    a {
-      margin-top: 10px;
-    } 
-  }
-
-  .item-btn {
-    width: 120px;
-    margin: 0 5px; 
-  }
-
-  .count-info {
-    text-align: center;
-    margin-left: 0px;
-  }
-
-  .input-wrapper {
-    input, textarea {
-      max-width: 100%;
-    }
-
-    textarea {
-      min-height: 150px;
-    }
-  }
-
-  .header-content {
-    flex-direction: column;
-    align-items: center; 
-  }
-
-  .btn-filter {
-    margin-top: 10px;
-  }
 }
 </style>
