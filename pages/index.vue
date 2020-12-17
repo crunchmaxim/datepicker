@@ -45,7 +45,7 @@
       img.modal-sort__close(:src="require('../assets/img/close.png')" @click="openModalSort = false")
   .container
     .header
-        .header__title  Мои заметки
+        .header__title Мои заметки
         .header__content
           search-input(@onFilterClick="() => {openModalFilter = true}" @onSortClick="openModalSort = true")
           button.header__create-note(@click="openModalCreate = true") 

@@ -43,9 +43,6 @@ export default {
   break-inside: avoid-column;
   background-color: #fff;
 
-
-
-
   &__title {
     font-size: 22px;
     font-weight: 700;  
