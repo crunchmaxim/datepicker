@@ -70,4 +70,10 @@ export default {
     }
   }
 }
+
+@media (max-width: 1200px) {
+  .note {
+    width: 100%;
+  }
+}
 </style>

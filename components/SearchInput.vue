@@ -69,6 +69,23 @@ export default {
   }
 }
 
+@media (max-width: 576px) {
+  .header {
+    &__content {
+      flex-direction: column;
+    }
+
+    &__title {
+      text-align: center !important;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+      margin-top: 20px; 
+    }
+  }
+}
 
 // .search-input {
 //   display: flex;

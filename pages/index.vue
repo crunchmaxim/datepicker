@@ -701,11 +701,75 @@ $white = #FFF;
 
 @media (max-width: 1200px) {
   .container {
-
+    width: 90%;
   }
 
   .notes-wrapper {
     column-count: 2;
+  }
+
+  .modal-create {
+  width: 700px;
+  height: 500px;
+  padding: 20px;
+
+    &__btn {
+      margin-top: 20px;
+    }
+
+    &__close {
+      top: 20px;
+      right: 20px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-create {
+  width: 500px;
+  height: 500px;
+  padding: 20px;
+  }
+}
+
+
+
+@media (max-width: 576px) {
+  .notes-wrapper {
+    display: flex;
+    flex-direction: column;
+    jujstify-content: center;
+    align-items: center;  
+  }
+
+  .container {
+    margin-top: 30px;
+  }
+
+  .modal-create {
+    width: 280px;
+    height: 500px;
+
+    &__btn {
+      display: block;
+      margin: 0 auto;
+      margin-top: 20px; 
+    }
+
+    &__title {
+      font-size: 24px; 
+    }
+  }
+
+  .modal-confirm {
+    width: 250px;
+    height: 250px;
+    padding: 20px;
+
+    div {
+      text-align: center;
+      font-size: 16px;  
+    }
   }
 }
 </style>
