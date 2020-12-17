@@ -23,8 +23,8 @@
         .modal-filter__title Отфильтровать
         .modal-filter__subtitle По дате
         .modal-filter__datepickers
-          date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat" placeholderText="с")
-          date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat" placeholderText="по")
+          date-picker(v-model="date", :disableDays="disableDaysStart" :inFormat="inFormat1" :outFormat="outFormat" placeholderText="с")
+          date-picker(v-model="date2", :disableDays="disableDaysEnd" :inFormat="inFormat2" :outFormat="outFormat" placeholderText="по")
         .modal-filter__btn-wrapper  
           button.modal-filter__btn(@click="onSetFilter") Применить
           button.modal-filter__btn-close(@click="onClearFilter") Сбросить
@@ -44,9 +44,6 @@
         button.modal-sort__btn-close(@click="onClearSort") Сбросить
       img.modal-sort__close(:src="require('../assets/img/close.png')" @click="openModalSort = false")
   .container
-    //- .picker-wrapper
-      //- date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
-      //- date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
     .header
         .header__title  Мои заметки
         .header__content
@@ -57,47 +54,6 @@
     .notes-wrapper 
       transition-group(name="animated")
         note-component(v-for="note in filteredCollection" :key="note.id" :note="note" @editNote="editNote(note)" @deleteNote="onClickDelete(note.id)")
-
-
-
-
-    //- items-list(:collection="filteredCollection" tag="ul" item-tag="li")
-    //-   template(v-slot:header)
-
-        //- .header-content
-        //-   .filter-wrapper
-        //-     div.filter
-        //-       button.btn-filter(@click="setDatepickerMode('create')") Filter by date create
-        //-       button.btn-filter(@click="setDatepickerMode('update')") Filter by date update
-        //-     div.filter 
-        //-       button.btn-filter(@click="setFilter('create')") Sort by date create
-        //-       button.btn-filter(@click="setFilter('update')") Sort by date update
-        //-   .search-wrapper
-        //-     .current-filters
-        //-       div(v-for="filter in currentFilters") {{}}
-        //-       button.btn-filter(@click="clearFilters" v-if="filterMode.type !== ''") Clear filters
-        //- .create-new-note
-        //-   nuxt-link(to='/edit') +Create new note
-
-      //- template(#item="{ item: { title, date_create, date_update, id, text }, index }")
-      //-   .note
-      //-     .note-title {{}}
-      //-     .note-text {{}}
-      //-     .note-date {{()}}
-      //-     img(:src="require('../assets/img/edit.png')")
-      //-     img(:src="require('../assets/img/delete.png')")
-
-
-
-      //- template(#tools="{item, index}")
-      //-   nuxt-link(:to="'/edit?id=' + item.id") 
-      //-     button.item-btn
-      //-       img(:src="require('../assets/img/edit.png')" class="btn-icon")
-      //-   button.item-btn(@click="onClickDelete(item.id)")
-      //-     img(:src="require('../assets/img/delete.png')" class="btn-icon")
-      template(v-slot:footer) 
-        .count-info Count of items: {{}}
-        button.show-more(@click="showMore" v-if="collection.length > countOfItems") Show more +
 </template>
 
 <script>
@@ -206,42 +162,37 @@ export default {
         (this.openModalCreate = true);
     },
 
-    // Check index
+    // Delete tone
     onClickDelete(id) {
       this.$store.dispatch("deleteOneNote", id);
     },
+    
+    // Disable days functions
     disableDaysStart(day) {
       return day > new Date(this.date2);
     },
     disableDaysEnd(day) {
       return day < new Date(this.date);
     },
-    showMore() {
-      this.countOfItems += 10;
-    },
 
     // Set filter mode
-    setFilter(variant) {
-      this.filterMode.variant = variant;
+    // setFilter(variant) {
+    //   this.filterMode.variant = variant;
 
-      if (this.filterMode.type === "" || this.filterMode.type === "desc") {
-        return (this.filterMode.type = "asc");
-      } else {
-        return (this.filterMode.type = "desc");
-      }
-    },
+    //   if (this.filterMode.type === "" || this.filterMode.type === "desc") {
+    //     return (this.filterMode.type = "asc");
+    //   } else {
+    //     return (this.filterMode.type = "desc");
+    //   }
+    // },
 
-    // Set datepicker mode
-    setDatepickerMode(variant) {
-      this.datepickerVariant = variant;
-    },
 
-    // Clear filters
-    clearFilters() {
-      this.datepickerVariant = "create";
-      this.filterMode.type = "";
-      this.filterMode.variant = "";
-    },
+    // // Clear filters
+    // clearFilters() {
+    //   this.datepickerVariant = "create";
+    //   this.filterMode.type = "";
+    //   this.filterMode.variant = "";
+    // },
   },
   computed: {
     stylePrimary() {
@@ -254,14 +205,9 @@ export default {
         "--color": "#9bf6ff",
       };
     },
-    // Collection from vuex
-    // collection() {
-    //   return this.$store.getters["getAllNotes"];
-    // },
-    
+
     // Filtered collection
     filteredCollection() {
-      // let collection = this.$store.getters["getAllNotes"].slice();
 
       let collection = this.$store.getters["getAllNotes"];
 
@@ -279,7 +225,7 @@ export default {
         });
       }
 
-      // Asc/desc date filter
+      // Asc/desc date sort
       if (this.isSorted) {
         let copyCollection = collection.slice()
         if (this.sortMode === "asc") {
@@ -295,35 +241,12 @@ export default {
         this.isSorted = false;
       } 
 
-      // if (this.sortMode === "asc") {
-      //   if (this.filterMode.variant === "create") {
-      //     collection.sort((a, b) => {
-      //       return a.date_create - b.date_create;
-      //     });
-      //   } else {
-      //     collection.sort((a, b) => {
-      //       return a.date_update - b.date_update;
-      //     });
-      //   }
-      // } else if (this.filterMode.type === "desc") {
-      //   if (this.filterMode.variant === "create") {
-      //     collection.sort((a, b) => {
-      //       return b.date_create - a.date_create;
-      //     });
-      //   } else {
-      //     collection.sort((a, b) => {
-      //       return b.date_update - a.date_update;
-      //     });
-      //   }
-      // }
-
       // Format date helper function
       function formatDate(date) {
         return new Date(date).setHours(0, 0, 0, 0);
       }
       
       // Filter by dates and datepicker variant
-      // if (this.isFilterMode) {
       if (this.selectedDate !== '' && this.selectedDate2 !== '') {
         let filtered = collection.filter((item) => {
           if (
@@ -335,43 +258,7 @@ export default {
         });
         return filtered;
       }
-      return collection;
-
-      // if (this.datepickerVariant === "create") {
-      //   let filtered = collection.filter((item) => {
-      //     if (
-      //       formatDate(item.date_create * 1000) >= formatDate(this.date) &&
-      //       formatDate(item.date_create * 1000) <= formatDate(this.date2)
-      //     ) {
-      //       return item;
-      //     }
-      //   });
-      //   return filtered;
-      // } else if (this.datepickerVariant === "update") {
-      //   let filtered = collection.filter((item) => {
-      //     if (
-      //       formatDate(item.date_update * 1000) >= formatDate(this.date) &&
-      //       formatDate(item.date_update * 1000) <= formatDate(this.date2)
-      //     ) {
-      //       return item;
-      //     }
-      //   });
-      //   return filtered;
-      // }
-    },
-
-    // Current using filters
-    currentFilters() {
-      let filters = [];
-
-      filters.push(`Filtered by: ${this.datepickerVariant}`);
-
-      if (this.filterMode.variant !== "" && this.filterMode.type !== "") {
-        filters.push(
-          `Sorted by: ${this.filterMode.variant} (${this.filterMode.type})`
-        );
-      }
-      return filters;
+      return collection;    
     },
   },
 };
@@ -384,10 +271,6 @@ $grey = #D8D8D8;
 $pink = #FF598B;
 $white = #FFF;
 
-
-// .animated-move, .animated-enter-active, .animated-enter, .animated-leave, .animated-leave-active, .animated-leave-to {
-//   transition: transform 2s;
-// }
 
 .animated-move {
   transition: transform 1s;
@@ -402,7 +285,6 @@ $white = #FFF;
 
 
 .container {
-  // padding 0 140px
   max-width: 1160px;
   width: 100%;
   margin: 0 auto;
@@ -450,18 +332,12 @@ $white = #FFF;
 .notes-wrapper {
   margin-top: 40px;
   column-count: 3;
-  // display: flex;
-  // flex-flow: column wrap;
-  // flex-flow: row wrap;
-  // height: 2000px;
-
   column-gap: 40px
 }
 
 .modal-create {
   width: 900px;
   height: 700px;
-  // border-radius: 5px;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -545,7 +421,6 @@ $white = #FFF;
     background-color: $pink;
     color: #fff;
     font-size: 14px;
-    // font-family: "Roboto"
     border: none;
     border-radius: 15px;
     margin-right: 10px;
@@ -729,7 +604,6 @@ $white = #FFF;
 .app {
   display: flex;
   flex-direction: column;
-  // padding-top: 128px;
 }
 
 .picker-wrapper {

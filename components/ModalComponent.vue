@@ -13,7 +13,6 @@ export default {
 <style lang="stylus">
 .modal-wrapper {
     position: fixed;
-    // position: absolute; 
     z-index: 7;
     width: 100vw;
     height: 100vh;
@@ -24,8 +23,6 @@ export default {
 }
 
 .modal-content {
-    // min-height: 100px;
-    // width: 100px; 
     background-color: #fff;
     border-radius: 5px; 
 }

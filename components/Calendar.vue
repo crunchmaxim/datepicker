@@ -26,12 +26,6 @@ import { format, isValid } from 'date-fns';
 export default {
   name: "Calendar",
   props: {
-    // date: {
-    //   type: String,
-    //   default() {
-    //     return "";
-    //   }
-    // },
     disableDays: {
       type: Function,
       default(day) {
@@ -99,12 +93,6 @@ export default {
         month: date.getMonth() + 1,
         year: date.getFullYear()
       };
-      //   let date = format(Date.now(), "dd.MM.yyyy");
-      //   return {
-      //     day: +date.split(".")[0],
-      //     month: +date.split(".")[1],
-      //     year: +date.split(".")[2]
-      //   };
     }
   },
   watch: {
@@ -174,8 +162,6 @@ export default {
 .calendar {
   position: relative;
   width: 200px;
-  // background-color: #fff;
-
 
   &__icon {
     position: absolute;
@@ -187,14 +173,12 @@ export default {
 
 .date-picker {
   position: relative;
-  // margin: 0 20px;
 }
 
 .wrapper {
   font-size 12px;
   height: 250px;
   width: 100%;
-  // border: 1px solid black;
   position: absolute;
   background-color: #fff;
   border: none;

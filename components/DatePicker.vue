@@ -1,9 +1,7 @@
 <template lang="pug">
 .date-picker
   input.date-input(:placeholder="placeholderText", maxlength=10 v-model="date" @change="changeInputDate")
-  //- span.close(@click="date = ''") &#10005;
-  
-  .error(v-if="showError") {{ error }}
+  //- .error(v-if="showError") {{}}
   Calendar(
     :disableDays="disableDays"
     @changeCurrentDate="setNewDate"
@@ -65,15 +63,6 @@ export default {
       // Show error on input
       showError: false,
       error: "",
-
-      // Current date values
-      // currentDay: "",
-      // currentMonth: "",
-      // currentYear: "",
-
-      // // Selected date values
-      // selectedMonth: "",
-      // selectedYear: "",
     };
   },
   computed: {},
@@ -83,7 +72,7 @@ export default {
       immediate: true,
       handler(newVal, oldVal) {
         if (newVal !== '') {
-          this.date = format(new Date(newVal), this.outFormat); // To change if changed props date format
+          this.date = format(new Date(newVal), this.outFormat);
         } else {
           this.date = ''
         }
@@ -98,13 +87,10 @@ export default {
   },
   methods: {
     setNewDate(date) {
-      // debugger;
       let day = format(new Date(date), "dd");
       let month = format(new Date(date), "MM");
       let year = format(new Date(date), "yyyy");
       let formattedDate = format(new Date(date), this.inFormat);
-      // let formattedDate = format(new Date(date), this.outFormat);
-      // debugger;
       if (Number.isInteger(+formattedDate)) {
         this.$emit("input", +formattedDate);
       } else {
@@ -112,10 +98,6 @@ export default {
       }
     },
     changeInputDate() {
-      // let changedDate = new Date(this.date)
-      // If input is empty
-
-
       let parsedDate = parse(this.date, this.outFormat, new Date());
 
       if (isValid(parsedDate)) {
@@ -145,10 +127,6 @@ export default {
           }
         }
         
-        // let day = changedDate.getMonth()
-        // let month = changedDate.getDate()
-        // let year = changedDate.getFullYear()
-
         // Clear error
         this.showError = false;
         this.error = '';
