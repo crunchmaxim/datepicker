@@ -14,7 +14,7 @@ export default {
 .modal-wrapper {
     position: fixed;
     // position: absolute; 
-    z-index: 2;
+    z-index: 7;
     width: 100vw;
     height: 100vh;
     background: rgba(0,0,0,0.4);

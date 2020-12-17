@@ -33,13 +33,18 @@ export default {
 <style lang="stylus">
 .note {
   padding: 40px 19px 30px 20px;
-  width: 360px;
+  // width: 360px;
+  width: 100%;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   margin-top: 40px;
   display: inline-block;
   box-sizing: border-box;
-  break-inside: avoid-column;   
+  break-inside: avoid-column;
+  background-color: #fff;
+
+
+
 
   &__title {
     font-size: 22px;
@@ -73,7 +78,7 @@ export default {
 
 @media (max-width: 1200px) {
   .note {
-    width: 98%;
+    // width: 98%;
   }
 }
 </style>

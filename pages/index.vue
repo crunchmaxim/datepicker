@@ -34,10 +34,10 @@
       .modal-sort__title Сортировать
       .modal-sort__sort-btn-wrapper
         button.modal-sort__sort-btn(@click="selectedSortMode = 'asc'" :class="selectedSortMode === 'asc' ? 'active' : ''")
-          img(:src="require('../assets/img/sort_asc.png')")
+          img.modal-sort__icon(:src="require('../assets/img/sort_asc.svg')" :class="selectedSortMode === 'asc' ? 'active' : ''")
           span От старых к новым
         button.modal-sort__sort-btn(@click="selectedSortMode = 'desc'" :class="selectedSortMode === 'desc' ? 'active' : ''")
-          img(:src="require('../assets/img/sort_desc.png')")
+          img.modal-sort__icon(:src="require('../assets/img/sort_desc.svg')" :class="selectedSortMode === 'desc' ? 'active' : ''")
           span От новых к старым
       .modal-sort__btn-wrapper
         button.modal-sort__btn(@click="onSetSort") Применить
@@ -55,7 +55,8 @@
             img(:src="require('../assets/img/plus.png')")
             span Создать
     .notes-wrapper 
-      note-component(v-for="note in filteredCollection" :key="note.id" :note="note" @editNote="editNote(note)" @deleteNote="onClickDelete(note.id)")
+      transition-group(name="animated")
+        note-component(v-for="note in filteredCollection" :key="note.id" :note="note" @editNote="editNote(note)" @deleteNote="onClickDelete(note.id)")
 
 
 
@@ -383,6 +384,23 @@ $grey = #D8D8D8;
 $pink = #FF598B;
 $white = #FFF;
 
+
+// .animated-move, .animated-enter-active, .animated-enter, .animated-leave, .animated-leave-active, .animated-leave-to {
+//   transition: transform 2s;
+// }
+
+.animated-move {
+  transition: transform 1s;
+}
+
+.animated-enter-active, .animated-leave-active {
+  transition: all 1s;
+}
+.animated-enter, .animated-leave-to /* .animated-leave-active до версии 2.1.8 */ {
+  opacity: 0;
+}
+
+
 .container {
   // padding 0 140px
   max-width: 1160px;
@@ -436,6 +454,8 @@ $white = #FFF;
   // flex-flow: column wrap;
   // flex-flow: row wrap;
   // height: 2000px;
+
+  column-gap: 40px
 }
 
 .modal-create {
@@ -620,6 +640,11 @@ $white = #FFF;
 
   &__sort-btn-wrapper {
     margin-top: 20px;
+    display: flex;
+  }
+
+  &__icon.active {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(207deg) brightness(102%) contrast(102%);
   }
 
   &__sort-btn {
@@ -634,13 +659,21 @@ $white = #FFF;
     font-weight: 500;
     text-align: left;
 
+    display: flex;
+    align-items: center;
+    padding-left: 21px;
+
     & img {
-      margin-right: 29px;
+      margin-right: 17px;
     }
 
     &:hover {
       background-color: $pink;
       color: $white;
+
+      .modal-sort__icon {
+        filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(207deg) brightness(102%) contrast(102%);
+      }
     }
 
     &:focus {
@@ -754,7 +787,11 @@ $white = #FFF;
     flex-direction: column;
     jujstify-content: center;
     align-items: center;
-    margin-top: 0px;  
+    margin-top: 0px;
+
+
+    width: 98%;
+    margin: 0 auto;  
   }
 
   .container {
@@ -773,6 +810,15 @@ $white = #FFF;
 
     &__title {
       font-size: 24px; 
+    }
+
+    &__input {
+      font-size: 16px; 
+    }
+
+    &__textarea {
+      font-size: 16px;
+      height: 230px; 
     }
   }
 
