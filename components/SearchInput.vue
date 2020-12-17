@@ -60,7 +60,7 @@ export default {
     border: none;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
     font-size: 18px;
-    padding-left 40px;
+    padding-left 50px;
     padding-right: 80px;  
 
     &:focus {
@@ -70,21 +70,7 @@ export default {
 }
 
 @media (max-width: 576px) {
-  .header {
-    &__content {
-      flex-direction: column;
-    }
 
-    &__title {
-      text-align: center !important;
-    }
-
-    button {
-      display: block;
-      margin: 0 auto;
-      margin-top: 20px; 
-    }
-  }
 }
 
 // .search-input {

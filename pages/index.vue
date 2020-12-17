@@ -441,7 +441,7 @@ $white = #FFF;
 .modal-create {
   width: 900px;
   height: 700px;
-  border-radius: 5px;
+  // border-radius: 5px;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -753,7 +753,8 @@ $white = #FFF;
     display: flex;
     flex-direction: column;
     jujstify-content: center;
-    align-items: center;  
+    align-items: center;
+    margin-top: 0px;  
   }
 
   .container {
@@ -819,6 +820,27 @@ $white = #FFF;
     &__btn-close {
       margin-left: 0px;
       margin-top: 10px;
+    }
+  }
+
+  .header {
+    position: sticky; 
+    top: 0;
+    z-index: 4;
+    padding: 20px 0px;
+
+    &__content {
+      flex-direction: column;
+    }
+
+    &__title {
+      text-align: center !important;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+      margin-top: 20px; 
     }
   }
 }

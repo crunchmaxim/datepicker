@@ -26,6 +26,7 @@ export default {
 .modal-content {
     // min-height: 100px;
     // width: 100px; 
-    background-color: #fff; 
+    background-color: #fff;
+    border-radius: 5px; 
 }
 </style>
