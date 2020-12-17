@@ -200,4 +200,10 @@ export default {
     background-color: gray;
   }
 }
+
+@media (max-width: 577px) {
+  .date-picker {
+    margin-top: 10px;
+  }
+}
 </style>

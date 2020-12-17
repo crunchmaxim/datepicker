@@ -730,6 +730,15 @@ $white = #FFF;
   height: 500px;
   padding: 20px;
   }
+
+  .modal-sort {
+    width: 500px;
+    padding: 20px;
+
+    &__sort-btn {
+      width: 200px;
+    }
+  }
 }
 
 
@@ -769,6 +778,42 @@ $white = #FFF;
     div {
       text-align: center;
       font-size: 16px;  
+    }
+  }
+
+  .modal-filter, .modal-sort {
+    width: 300px;
+    height: 300px;
+    padding: 20px;
+
+    &__datepickers {
+      flex-direction: column;
+    }
+  }
+
+  .modal-sort {
+    &__sort-btn-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__sort-btn:last-child {
+      margin-left: 0px;
+      margin-top: 10px;
+    }
+
+    &__btn-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__btn-close {
+      margin-left: 0px;
+      margin-top: 10px;
     }
   }
 }
