@@ -1,6 +1,6 @@
 <template lang="pug">
 .date-picker
-  input.date-input(placeholder="Choose date", maxlength=10 v-model="date" @change="changeInputDate")
+  input.date-input(:placeholder="placeholderText", maxlength=10 v-model="date" @change="changeInputDate")
   //- span.close(@click="date = ''") &#10005;
   
   .error(v-if="showError") {{ error }}
@@ -26,6 +26,12 @@ export default {
     Calendar,
   },
   props: {
+    placeholderText: {
+      type: String,
+      default() {
+        return 'Choose date'
+      }
+    },
     disableDays: {
       type: Function,
       default(day) {

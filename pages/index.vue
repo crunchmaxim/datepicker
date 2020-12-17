@@ -23,8 +23,8 @@
         .modal-filter__title Отфильтровать
         .modal-filter__subtitle По дате
         .modal-filter__datepickers
-          date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
-          date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
+          date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat" placeholderText="с")
+          date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat" placeholderText="по")
         .modal-filter__btn-wrapper  
           button.modal-filter__btn(@click="onSetFilter") Применить
           button.modal-filter__btn-close(@click="onClearFilter") Сбросить
