@@ -3,13 +3,15 @@
     .note__title {{note.title}}
     .note__text {{note.text}}
     .note__footer
-        .note__date {{note.date_create}}
+        .note__date {{formatedDate}}
         .note__icons
           img(:src="require('../assets/img/edit.png')" @click="$emit('editNote')")
           img(:src="require('../assets/img/delete.png')" @click="$emit('deleteNote')")
 </template>
 
 <script>
+import { format } from 'date-fns';
+
 export default {
     name: "NoteComponent",
     props: {
@@ -18,6 +20,11 @@ export default {
         default() {
           return {}
         }
+      }
+    },
+    computed: {
+      formatedDate() {
+        return format(new Date(this.note.date_create*1000), 'dd.MM.yyyy')
       }
     }
 }
@@ -30,6 +37,9 @@ export default {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   margin-top: 40px;
+  display: inline-block;
+  box-sizing: border-box;
+  break-inside: avoid-column;   
 
   &__title {
     font-size: 22px;
@@ -50,9 +60,13 @@ export default {
   }
 
   &__icons {
+    display: flex;
+
     img {
       margin-left: 25px;
       cursor: pointer;
+      width: 12px;
+      height: 16px;
     }
   }
 }

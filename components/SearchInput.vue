@@ -3,7 +3,7 @@
     input.search__input(v-model="searchText")
     img.search__search-icon(:src="require('../assets/img/search.png')")
     img.search__filter-icon(:src="require('../assets/img/filter.png')" @click="$emit('onFilterClick')")
-    img.search__sort-icon(:src="require('../assets/img/sort.png')")
+    img.search__sort-icon(:src="require('../assets/img/sort.png')" @click="$emit('onSortClick')")
 </template>
 
 <script>

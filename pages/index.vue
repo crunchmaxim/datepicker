@@ -29,14 +29,28 @@
           button.modal-filter__btn(@click="onSetFilter") Применить
           button.modal-filter__btn-close(@click="onClearFilter") Сбросить
         img.modal-filter__close(:src="require('../assets/img/close.png')" @click="openModalFilter = false")
+  modal-component(v-if="openModalSort")
+    .modal-sort
+      .modal-sort__title Сортировать
+      .modal-sort__sort-btn-wrapper
+        button.modal-sort__sort-btn(@click="selectedSortMode = 'asc'" :class="selectedSortMode === 'asc' ? 'active' : ''")
+          img(:src="require('../assets/img/sort_asc.png')")
+          span От старых к новым
+        button.modal-sort__sort-btn(@click="selectedSortMode = 'desc'" :class="selectedSortMode === 'desc' ? 'active' : ''")
+          img(:src="require('../assets/img/sort_desc.png')")
+          span От новых к старым
+      .modal-sort__btn-wrapper
+        button.modal-sort__btn(@click="onSetSort") Применить
+        button.modal-sort__btn-close(@click="onClearSort") Сбросить
+      img.modal-sort__close(:src="require('../assets/img/close.png')" @click="openModalSort = false")
   .container
-    .picker-wrapper
+    //- .picker-wrapper
       //- date-picker(v-model="date", :disableDays="disableDaysStart" :style="stylePrimary" :inFormat="inFormat1" :outFormat="outFormat")
       //- date-picker(v-model="date2", :disableDays="disableDaysEnd" :style="styleSecondary" :inFormat="inFormat2" :outFormat="outFormat")
     .header
         .header__title  Мои заметки
         .header__content
-          search-input(@onFilterClick="openModalFilter = true")
+          search-input(@onFilterClick="openModalFilter = true" @onSortClick="openModalSort = true")
           button.header__create-note(@click="openModalCreate = true") 
             img(:src="require('../assets/img/plus.png')")
             span Создать
@@ -103,8 +117,8 @@ export default {
   data() {
     return {
       countOfItems: 10,
-      date: '',
-      date2: '',
+      date: "",
+      date2: "",
       inFormat1: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
@@ -113,26 +127,46 @@ export default {
       openModalCreate: false,
       openModalConfirm: false,
       openModalFilter: false,
+      openModalSort: false,
       isFilterMode: false,
+      selectedSortMode: "",
+      sortMode: "",
+      isSorted: false,
       title: "",
       text: "",
       editedId: null,
     };
   },
   methods: {
+    // Set sort filter
+    onSetSort() {
+      if (this.selectedSortMode !== "") {
+        this.sortMode = this.selectedSortMode
+        this.isSorted = true;
+      }
+      this.openModalSort = false;
+    },
+    //Clear sort filter
+    onClearSort() {
+      this.isSorted = false;
+      this.selectedSortMode = "";
+      this.sortMode = "";
+      this.openModalSort = false;
+    },
+
     // Set date filter
     onSetFilter() {
-      if (this.date !== '' && this.date2 !== '') {
-        this.isFilterMode = true
-        this.openModalFilter = false
+      if (this.date !== "" && this.date2 !== "") {
+        this.isFilterMode = true;
+        this.openModalFilter = false;
       }
     },
     // Clear date filter
     onClearFilter() {
-      this.date = ''
-      this.date2 = ''
-      this.isFilterMode = false
-      this.openModalFilter = false
+      this.date = "";
+      this.date2 = "";
+      this.isFilterMode = false;
+      this.openModalFilter = false;
     },
 
     // Create / edit note
@@ -145,14 +179,14 @@ export default {
             text: this.text,
           },
         };
-        this.$store.dispatch('updateOneNote', payload)
+        this.$store.dispatch("updateOneNote", payload);
       } else {
         this.$store.dispatch("createNewNote", {
           title: this.title,
           text: this.text,
         });
       }
-      
+
       this.title = "";
       this.text = "";
       this.editedId = null;
@@ -214,18 +248,18 @@ export default {
       };
     },
     // Collection from vuex
-    collection() {
-      return this.$store.getters["getAllNotes"];
-    },
+    // collection() {
+    //   return this.$store.getters["getAllNotes"];
+    // },
+    
     // Filtered collection
     filteredCollection() {
-      // let collection = this.$store.getters["getAllNotes"];
+      // let collection = this.$store.getters["getAllNotes"].slice();
 
       let collection = this.$store.getters["getAllNotes"];
 
-      const filterText = this.$store.getters["filter"];
-
       // Filter by search input
+      const filterText = this.$store.getters["filter"];
       if (filterText !== "") {
         collection = collection.filter((note) => {
           if (note.title.toLowerCase().startsWith(filterText.toLowerCase())) {
@@ -238,28 +272,43 @@ export default {
         });
       }
 
-      // Asc/desc created date filter
-      if (this.filterMode.type === "asc") {
-        if (this.filterMode.variant === "create") {
-          collection.sort((a, b) => {
+      // Asc/desc date filter
+      if (this.isSorted) {
+        let copyCollection = collection.slice()
+        if (this.sortMode === "asc") {
+          copyCollection.sort((a, b) => {
             return a.date_create - b.date_create;
           });
-        } else {
-          collection.sort((a, b) => {
-            return a.date_update - b.date_update;
-          });
-        }
-      } else if (this.filterMode.type === "desc") {
-        if (this.filterMode.variant === "create") {
-          collection.sort((a, b) => {
+        } else if (this.sortMode === "desc") {
+          copyCollection.sort((a, b) => {
             return b.date_create - a.date_create;
           });
-        } else {
-          collection.sort((a, b) => {
-            return b.date_update - a.date_update;
-          });
         }
-      }
+        collection = copyCollection
+        this.isSorted = false;
+      } 
+
+      // if (this.sortMode === "asc") {
+      //   if (this.filterMode.variant === "create") {
+      //     collection.sort((a, b) => {
+      //       return a.date_create - b.date_create;
+      //     });
+      //   } else {
+      //     collection.sort((a, b) => {
+      //       return a.date_update - b.date_update;
+      //     });
+      //   }
+      // } else if (this.filterMode.type === "desc") {
+      //   if (this.filterMode.variant === "create") {
+      //     collection.sort((a, b) => {
+      //       return b.date_create - a.date_create;
+      //     });
+      //   } else {
+      //     collection.sort((a, b) => {
+      //       return b.date_update - a.date_update;
+      //     });
+      //   }
+      // }
 
       // Format date helper function
       function formatDate(date) {
@@ -268,7 +317,7 @@ export default {
 
       // Filter by dates and datepicker variant
       if (this.isFilterMode) {
-                let filtered = collection.filter((item) => {
+        let filtered = collection.filter((item) => {
           if (
             formatDate(item.date_create * 1000) >= formatDate(this.date) &&
             formatDate(item.date_create * 1000) <= formatDate(this.date2)
@@ -334,6 +383,8 @@ $white = #FFF;
   max-width: 1160px;
   width: 100%;
   margin: 0 auto;
+  margin-top: 128px;
+  padding-bottom: 100px; 
 }
 
 .header {
@@ -365,7 +416,7 @@ $white = #FFF;
     justify-content: center;
     cursor: pointer;
     font-size: 18px;
-    font-weight: 500;  
+    font-weight: 500;
 
     img {
       margin-right: 8px;
@@ -375,6 +426,7 @@ $white = #FFF;
 
 .notes-wrapper {
   margin-top: 40px;
+  column-count: 3;
   // display: flex;
   // flex-flow: column wrap;
   // flex-flow: row wrap;
@@ -494,21 +546,21 @@ $white = #FFF;
   padding: 40px;
   border-radius: 5px;
   color: $black;
-  position: relative;   
+  position: relative;
 
   &__title {
     font-size: 22px;
     font-weight: 700;
-  } 
+  }
 
   &__subtitle {
     font-size: 18px;
-    margin-top: 20px; 
+    margin-top: 20px;
   }
 
   &__datepickers {
     display: flex;
-    margin-top: 20px; 
+    margin-top: 20px;
   }
 
   &__btn-wrapper {
@@ -525,37 +577,135 @@ $white = #FFF;
     border: none;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
-    cursor: pointer; 
+    cursor: pointer;
   }
 
   &__btn-close {
     background-color: #fff;
-    border:2px solid $pink;
+    border: 2px solid $pink;
     border-radius: 15px;
     color: $pink;
     width: 150px;
     height: 40px;
     cursor: pointer;
-    margin-left: 20px; 
+    margin-left: 20px;
   }
 
   &__close {
     position: absolute;
     width: 16px;
-    top: 24px;
-    right: 24px;
-    cursor: pointer; 
+    top: 32px;
+    right: 32px;
+    cursor: pointer;
   }
 }
 
-// ////////////////////////////////////////////////////
+.modal-sort {
+  width: 580px;
+  height: 220px;
+  border-radius: 5px;
+  padding: 40px;
+  position: relative;
+
+  &__title {
+    font-size: 22px;
+    color: $black;
+    font-weight: 700;
+  }
+
+  &__sort-btn-wrapper {
+    margin-top: 20px;
+  }
+
+  &__sort-btn {
+    width: 240px;
+    height: 40px;
+    border: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+
+    & img {
+      margin-right: 29px;
+    }
+
+    &:hover {
+      background-color: $pink;
+      color: $white;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.active {
+      background-color: $pink;
+      color: $white;
+    }
+
+    &:last-child {
+      margin-left: 20px;
+    }
+  }
+
+  &__btn-wrapper {
+    margin-top: 20px;
+  }
+
+  &__btn {
+    width: 150px;
+    height: 40px;
+    background: $pink;
+    border: none;
+    border-radius: 15px;
+    color: $white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  &__btn-close {
+    width: 150px;
+    height: 40px;
+    background-color: #fff;
+    border: 2px solid $pink;
+    border-radius: 15px;
+    margin-left: 20px;
+    color: $pink;
+    cursor: pointer;
+  }
+
+  &__close {
+    width: 16px;
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    cursor: pointer;
+  }
+}
+
 .app {
   display: flex;
   flex-direction: column;
+  // padding-top: 128px;
 }
 
 .picker-wrapper {
   display: flex;
   padding-top: 20px;
+}
+
+@media (max-width: 1200px) {
+  .container {
+
+  }
+
+  .notes-wrapper {
+    column-count: 2;
+  }
 }
 </style>

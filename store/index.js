@@ -90,6 +90,7 @@ export const getters = {
     // },
     getAllNotes(state) {
         return state.notes.slice()
+        // return [...state.notes]
     },
     getOneNote: state => id => {
         return state.notes.filter(note => note.id == id)[0]

@@ -1,5 +1,4 @@
 <template lang="pug">
-  .note-page 
     .note-wrapper
         .home-link-wrapper
             nuxt-link.home-link(to='/')  &lt; Home
@@ -32,6 +31,9 @@ export default {
         border-radius: 10px;
         background-color: #1565C0;
         color: #fff;
+        display: inline-block;
+        box-sizing: border-box;
+        break-inside: avoid;   
     }
 
     .note-title {
