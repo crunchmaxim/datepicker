@@ -50,12 +50,12 @@
     .header
         .header__title  Мои заметки
         .header__content
-          search-input(@onFilterClick="openModalFilter = true" @onSortClick="openModalSort = true")
+          search-input(@onFilterClick="() => {openModalFilter = true}" @onSortClick="openModalSort = true")
           button.header__create-note(@click="openModalCreate = true") 
             img(:src="require('../assets/img/plus.png')")
             span Создать
     .notes-wrapper 
-      note-component(v-for="note in filteredCollection" :note="note" @editNote="editNote(note)" @deleteNote="onClickDelete(note.id)")
+      note-component(v-for="note in filteredCollection" :key="note.id" :note="note" @editNote="editNote(note)" @deleteNote="onClickDelete(note.id)")
 
 
 
@@ -119,6 +119,8 @@ export default {
       countOfItems: 10,
       date: "",
       date2: "",
+      selectedDate: "",
+      selectedDate2: "",
       inFormat1: "yyyy-MM-dd",
       inFormat2: "TT",
       outFormat: "dd.MM.yyyy",
@@ -157,7 +159,9 @@ export default {
     // Set date filter
     onSetFilter() {
       if (this.date !== "" && this.date2 !== "") {
-        this.isFilterMode = true;
+        // this.isFilterMode = true;
+        this.selectedDate = this.date
+        this.selectedDate2 = this.date2
         this.openModalFilter = false;
       }
     },
@@ -165,6 +169,8 @@ export default {
     onClearFilter() {
       this.date = "";
       this.date2 = "";
+      this.selectedDate = '';
+      this.selectedDate2 = ''
       this.isFilterMode = false;
       this.openModalFilter = false;
     },
@@ -314,20 +320,20 @@ export default {
       function formatDate(date) {
         return new Date(date).setHours(0, 0, 0, 0);
       }
-
+      
       // Filter by dates and datepicker variant
-      if (this.isFilterMode) {
+      // if (this.isFilterMode) {
+      if (this.selectedDate !== '' && this.selectedDate2 !== '') {
         let filtered = collection.filter((item) => {
           if (
-            formatDate(item.date_create * 1000) >= formatDate(this.date) &&
-            formatDate(item.date_create * 1000) <= formatDate(this.date2)
+            formatDate(item.date_create * 1000) >= formatDate(this.selectedDate) &&
+            formatDate(item.date_create * 1000) <= formatDate(this.selectedDate2)
           ) {
             return item;
           }
         });
         return filtered;
       }
-
       return collection;
 
       // if (this.datepickerVariant === "create") {
@@ -364,7 +370,6 @@ export default {
           `Sorted by: ${this.filterMode.variant} (${this.filterMode.type})`
         );
       }
-
       return filters;
     },
   },
