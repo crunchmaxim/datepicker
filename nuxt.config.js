@@ -30,12 +30,26 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
+
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/pwa',
   ],
+
+  // pwa: {
+  //   meta: {
+  //     title: 'My PWA',
+  //     author: 'Me',
+  //   },
+  //   manifest: {
+  //     name: 'Nuxt.js PWAs are so easy',
+  //     short_name: 'Nuxt.js PWA',
+  //     lang: 'en',
+  //   },
+  // },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {

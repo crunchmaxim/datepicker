@@ -262,7 +262,6 @@ export default {
     },
   },
   mounted() {
-    // debugger;
     localStorage.setItem('notes-app', JSON.stringify(this.$store.state))
   }
 };
