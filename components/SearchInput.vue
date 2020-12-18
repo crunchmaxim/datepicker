@@ -20,7 +20,7 @@ export default {
       searchText: debounce(function () {
           this.$store.dispatch('filterNotesByTitle', this.searchText)            
       }, 1300)
-    }
+    },
 }
 </script>
 

@@ -1,6 +1,6 @@
 export const state = () => ({
     notes: [],
-    filter: ''
+    filter: '',
 })
 
 export const mutations = {
@@ -14,7 +14,7 @@ export const mutations = {
 
     filterNotes(state, value) {
         state.filter = value
-    }
+    },
 }
 
 
