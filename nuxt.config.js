@@ -13,6 +13,11 @@ export default {
     ]
   },
 
+  target: 'static',
+  router: {
+    base: '/datepicker/'
+  },
+
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
 
