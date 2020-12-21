@@ -27,7 +27,6 @@ export default {
   plugins: [
     {src: '~plugins/vuemask.client.js'},
     { src: '~/plugins/vuex-persist', ssr: false }
-    // { src: '~plugins/persistedState.client', ssr: false }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -43,18 +42,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
   ],
-
-  // pwa: {
-  //   meta: {
-  //     title: 'My PWA',
-  //     author: 'Me',
-  //   },
-  //   manifest: {
-  //     name: 'Nuxt.js PWAs are so easy',
-  //     short_name: 'Nuxt.js PWA',
-  //     lang: 'en',
-  //   },
-  // },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
